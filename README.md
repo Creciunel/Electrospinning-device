@@ -38,6 +38,9 @@
   <li>L293D driver</li>
 </ul>
 
+<h3>High voltage schematic</h3>
+<img src="Images/HVS.jpg" alt="High voltage source" width="300">
+
 <h2>Usage</h2>
 
 <p>To use the electrospinning device:</p>
