@@ -19,7 +19,7 @@
   <li>Control and monitoring of various parameters involved in the electrospinning process.</li>
   <li>Integration with Arduino Mega microcontroller for easy customization and expansion.</li>
   <li>High voltage source consisting of ZVS driver, flyback transformer, capacitors, and voltage divider for measuring the output voltage.</li>
-  <li>ILI4931 screen with touch for user interface.</li>
+  <li>ILI9341 screen with touch for user interface.</li>
   <li>2 motors for controlling the electrospinning process.</li>
   <li>L293D driver for regulating the amount that passes through the syringe.</li>
 </ul>
@@ -33,7 +33,7 @@
   <li>Capacitors</li>
   <li>Voltage divider</li>
   <li>Arduino Mega microcontroller</li>
-  <li>ILI4931 screen with touch</li>
+  <li>ILI9341 screen with touch</li>
   <li>2 motors</li>
   <li>L293D driver</li>
 </ul>
@@ -41,13 +41,16 @@
 <h3>High voltage schematic</h3>
 <img src="Images/HVS.jpg" alt="High voltage source" width="300">
 
+<h3>General control scheme</h3>
+<img src="Images/MCU.jpg" alt="Main control" width="300">
+
 <h2>Usage</h2>
 
 <p>To use the electrospinning device:</p>
 <ol>
   <li>Connect the high voltage source components according to the provided schematics.</li>
   <li>Connect the Arduino Mega to the components and upload the provided source code.</li>
-  <li>Use the ILI4931 screen with touch to control and monitor the electrospinning process.</li>
+  <li>Use the ILI9341 screen with touch to control and monitor the electrospinning process.</li>
   <li>Adjust the settings as needed and start the electrospinning process.</li>
   <li>Monitor the output and make adjustments as necessary.</li>
 </ol>
