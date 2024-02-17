@@ -9,29 +9,41 @@ This repository contains the source code, hardware schematics, and documentation
 - [Contributing](#contributing)
 - [License](#license)
 
-##Features
-
+## Features
+The device provides the following features:
+- Control and monitoring of various parameters involved in the electrospinning process.
+- Integration with Arduino Mega microcontroller for easy customization and expansion.
+- High voltage source consisting of ZVS driver, flyback transformer, capacitors, and voltage divider for measuring the output voltage.
+- ILI4931 screen with touch for user interface.
+- 2 motors for controlling the electrospinning process.
+- L293D driver for regulating the amount that passes through the syringe.
 
 ## Hardware Setup
 
-This section provides detailed information about the hardware setup required for the project.
+![High voltage source](Images/HVS.jpg)
 
-## Description
+The hardware setup consists of the following components:
+- ZVS driver
+- Flyback transformer
+- Capacitors
+- Voltage divider
+- Arduino Mega microcontroller
+- ILI4931 screen with touch
+- 2 motors
+- L293D driver
 
-In our project, configuring the hardware is crucial for the proper functioning of the device. Therefore, we have placed special emphasis on selecting the right components and how they interact with each other. The main aspects of the hardware configuration include:
+## Usage
+To use the electrospinning device:
+1. Connect the high voltage source components according to the provided schematics.
+2. Connect the Arduino Mega to the components and upload the provided source code.
+3. Use the ILI4931 screen with touch to control and monitor the electrospinning process.
+4. Adjust the settings as needed and start the electrospinning process.
+5. Monitor the output and make adjustments as necessary.
 
-- **Microcontroller and Interface Modules**: We have chosen a powerful and versatile microcontroller to efficiently manage all the functions of the device. Additionally, we have integrated interface modules to facilitate communication with other devices and systems.
+## Contributing
+Contributions to this project are welcome. Please fork the repository, make your changes, and submit a pull request.
 
-![High voltage source](/Images/HVS.jpg)
-
-- **Sensors and Actuators**: The device is equipped with a variety of specialized sensors and actuators to measure various parameters and to control various aspects of the surrounding environment.
-- **Connections and Wiring**: We have designed an efficient and robust wiring scheme to ensure stable and reliable connectivity between all components of the device.
-- **Enclosure and Assembly**: We have considered design and assembly aspects to create an ergonomic and aesthetically pleasing enclosure that provides protection and facilitates installation and use of the device.
-
-These aspects are essential for creating a functional and high-performance device, and further details about each component and connection will be provided in the next section, "Hardware Setup."
-
-## Added Content
-
-The device broadly consists of the high voltage source, which includes a ZVS driver, flyback transformer, capacitors, and a voltage divider for measuring the output voltage. The MCU is connected to the Arduino Mega bus, and we have an ILI4931 screen with touch, as well as 2 motors and a scheme with an L293D driver that directs with the collector and regulates the amount that passes through the syringe.
+## License
+This project is licensed under the [MIT License](LICENSE).
 
 
