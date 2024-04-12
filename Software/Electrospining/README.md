@@ -19,4 +19,4 @@
 </ol>
 
 <h2>Build files</h2>
-<p> as HEX is located on <a href="/.pio/build/megaatmega2560/firmware.hex">HEX. </a></p>
+<p> as HEX is located on <a href=".pio/build/megaatmega2560/firmware.hex">HEX. </a></p>
