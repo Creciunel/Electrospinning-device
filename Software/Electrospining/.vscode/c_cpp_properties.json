@@ -1,0 +1,60 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "/home/crc/Documents/Electrospinning-device/Software/Electrospining/include",
+                "/home/crc/Documents/Electrospinning-device/Software/Electrospining/src",
+                "/home/crc/Documents/Electrospinning-device/Software/Electrospining/lib/ILI9341_due",
+                "/home/crc/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+                "/home/crc/Documents/Electrospinning-device/Software/Electrospining/lib/Arduino_FreeRTOS_Library/src",
+                "/home/crc/.platformio/packages/framework-arduino-avr/cores/arduino",
+                "/home/crc/.platformio/packages/framework-arduino-avr/variants/mega",
+                "/home/crc/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                "/home/crc/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+                "/home/crc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+                "/home/crc/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "/home/crc/Documents/Electrospinning-device/Software/Electrospining/include",
+                    "/home/crc/Documents/Electrospinning-device/Software/Electrospining/src",
+                    "/home/crc/Documents/Electrospinning-device/Software/Electrospining/lib/ILI9341_due",
+                    "/home/crc/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+                    "/home/crc/Documents/Electrospinning-device/Software/Electrospining/lib/Arduino_FreeRTOS_Library/src",
+                    "/home/crc/.platformio/packages/framework-arduino-avr/cores/arduino",
+                    "/home/crc/.platformio/packages/framework-arduino-avr/variants/mega",
+                    "/home/crc/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                    "/home/crc/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+                    "/home/crc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+                    "/home/crc/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=60114",
+                "ARDUINO_AVR_MEGA2560",
+                "F_CPU=16000000L",
+                "ARDUINO_ARCH_AVR",
+                "ARDUINO=10808",
+                "__AVR_ATmega2560__",
+                ""
+            ],
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++11",
+            "compilerPath": "/home/crc/.platformio/packages/toolchain-atmelavr/bin/avr-gcc",
+            "compilerArgs": [
+                "-mmcu=atmega2560",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}

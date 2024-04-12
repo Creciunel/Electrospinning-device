@@ -55,6 +55,10 @@
   <li>Monitor the output and make adjustments as necessary.</li>
 </ol>
 
+<h3>Block diagram of the circuit</h3>
+<img src="Images/Block-diagram.jpg.jpg" alt="Main control" width="300">
+<p></p>
+
 <h2>Contributing</h2>
 
 <p>Contributions to this project are welcome. Please fork the repository, make your changes, and submit a pull request.</p>
