@@ -13,11 +13,11 @@ void displayTask(void *pvParameters)
         Serial.println("-1, TFT display error");
 
     tft.setRotation(iliRotation270);
-    tft.fillScreen(ILI9341_BLUE);
+    tft.fillScreen(ILI9341_WHITE);
 
     tft.setFont(Arial_bold_14);
     tft.setTextLetterSpacing(5);
-    tft.setTextColor(ILI9341_WHITE, ILI9341_BLUE);
+    tft.setTextColor(ILI9341_BLACK, ILI9341_WHITE);
     tft.printAligned(F("Hello World"), gTextAlignMiddleCenter);
     // loop part
     for (;;)
