@@ -26,23 +26,49 @@
 
 <h2>Hardware Setup</h2>
 
-<p>The hardware setup consists of the following components:</p>
-<ul>
-  <li>ZVS driver</li>
-  <li>Flyback transformer</li>
-  <li>Capacitors</li>
-  <li>Voltage divider</li>
-  <li>Arduino Mega microcontroller</li>
-  <li>ILI9341 screen with touch</li>
-  <li>2 motors</li>
-  <li>L293D driver</li>
-</ul>
-
-<h3>High voltage schematic</h3>
-<img src="Images/HVS.jpg" alt="High voltage source" width="300">
-
-<h3>General control scheme</h3>
-<img src="Images/MCU.jpg" alt="Main control" width="300">
+<table>
+  <tr>
+    <th>
+      <p>The hardware setup consists of the following components:</p>
+    </th>
+    <th>It work as</th>
+  </tr>
+  <tr>
+    <td>
+      <ul>
+        <li>ZVS driver</li>
+        <li>Flyback transformer</li>
+        <li>Capacitors</li>
+        <li>Voltage divider</li>
+        <li>Arduino Mega microcontroller</li>
+        <li>ILI9341 screen with touch</li>
+        <li>2 motors</li>
+        <li>L293D driver</li>
+      </ul>
+  </td>
+    <td>
+      <ul>
+        <li><b>The high voltage power supply</b> generates the high voltage needed for the electrospinning process. Its role is to provide a stable and adjustable voltage source to create the electrostatic field required to draw the polymer solution into nanofibers.</li>
+        <li><b>The ZVS (Zero Voltage Switching) driver</b> minimizes switching losses in power semiconductor devices by ensuring that switching occurs when the voltage across the switches is close to zero. It works by carefully timing the switching events to coincide with the natural resonant frequency of the circuit, reducing power dissipation and improving efficiency.</li>
+        <li><b>The Flyback transformer</b> is used to step up the voltage from the high voltage power supply to the level required for electrospinning. It operates by storing energy in its primary winding during the on-time of the switching cycle and then releasing this energy to the secondary winding during the off-time. This stepped-up voltage is then applied to the electrospinning setup.</li>
+        <li><b>The voltage divider</b> is used to measure the output voltage with an Arduino by dividing the high voltage output to a range that is safe for the Arduino's analog input. It consists of two resistors connected in series, with the output voltage taken from the connection between them. This allows the Arduino to accurately measure the high voltage output without damaging itself.</li>
+        <li><b>The voltage</b> is applied to the tip of the syringe needle, which contains the polymer solution. This is typically done using a conductive needle connected to the high voltage power supply. When the high voltage is applied, it creates an electrostatic field around the needle, causing the polymer solution to be drawn out in the form of nanofibers.</li>
+      </il>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <h3>High voltage schematic</h3>
+        <img src="Images/HVS.jpg" alt="High voltage source" width="300">
+      <h3>General control scheme</h3>
+        <img src="Images/MCU.jpg" alt="Main control" width="300">
+    </td>
+    <td>
+      <h3>Block diagram of the circuit</h3>
+        <img src="Images/Block-diagram.jpg" alt="Main control" width="300">
+    </td>
+  </tr>
+</table>
 
 <h2>Usage</h2>
 
@@ -54,10 +80,6 @@
   <li>Adjust the settings as needed and start the electrospinning process.</li>
   <li>Monitor the output and make adjustments as necessary.</li>
 </ol>
-
-<h3>Block diagram of the circuit</h3>
-<img src="Images/Block-diagram.jpg.jpg" alt="Main control" width="300">
-<p></p>
 
 <h2>Contributing</h2>
 
