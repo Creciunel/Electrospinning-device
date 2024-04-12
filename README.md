@@ -53,19 +53,19 @@
         <li><b>The Flyback transformer</b> is used to step up the voltage from the high voltage power supply to the level required for electrospinning. It operates by storing energy in its primary winding during the on-time of the switching cycle and then releasing this energy to the secondary winding during the off-time. This stepped-up voltage is then applied to the electrospinning setup.</li>
         <li><b>The voltage divider</b> is used to measure the output voltage with an Arduino by dividing the high voltage output to a range that is safe for the Arduino's analog input. It consists of two resistors connected in series, with the output voltage taken from the connection between them. This allows the Arduino to accurately measure the high voltage output without damaging itself.</li>
         <li><b>The voltage</b> is applied to the tip of the syringe needle, which contains the polymer solution. This is typically done using a conductive needle connected to the high voltage power supply. When the high voltage is applied, it creates an electrostatic field around the needle, causing the polymer solution to be drawn out in the form of nanofibers.</li>
-      </il>
+      </ul>
     </td>
   </tr>
   <tr>
     <td>
       <h3>High voltage schematic</h3>
-        <img src="Images/HVS.jpg" alt="High voltage source" width="300">
+        <img src="Images/HVS.jpg" alt="High voltage source" style="max-width: 100%;">
       <h3>General control scheme</h3>
-        <img src="Images/MCU.jpg" alt="Main control" width="300">
+        <img src="Images/MCU.jpg" alt="Main control" style="max-width: 100%;">
     </td>
     <td>
       <h3>Block diagram of the circuit</h3>
-        <img src="Images/Block-diagram.jpg" alt="Main control" width="300">
+        <img src="Images/Block-diagram.jpg" alt="Main control" style="max-width: 100%;">
     </td>
   </tr>
 </table>
