@@ -17,3 +17,6 @@
     <li><strong>voltageMeasureTask()</strong>: This function handles voltage measurement using the ADC and semaphores for synchronized access to data.</li>
     <li><strong>motorsTask()</strong>: This function controls the motors and interacts with them.</li>
 </ol>
+
+<h2>Build files</h2>
+<p> as HEX is located on <a href="/.pio/build/megaatmega2560/firmware.hex">HEX. </a></p>
