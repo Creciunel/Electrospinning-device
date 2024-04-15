@@ -69,6 +69,8 @@
 </table>
 
 <p>See more about <a href="/Hardware/README.md">hardware.</a></p>
+<p>See more about <a href="/Software/UI/README.md">software UI.</a></p>
+<p>See more about <a href="/Software/Electrospining/README.md">softoare board code.</a></p>
 
 <h2>Usage</h2>
 
