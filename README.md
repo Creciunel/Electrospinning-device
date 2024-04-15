@@ -31,7 +31,7 @@
     <th>
       <p>The hardware setup consists of the following components:</p>
     </th>
-    <th>It work as</th>
+    <th>It works as</th>
   </tr>
   <tr>
     <td>
@@ -67,6 +67,8 @@
     </td>
   </tr>
 </table>
+
+<p>See more about <a href="/Hardware/README.md">hardware.</a></p>
 
 <h2>Usage</h2>
 

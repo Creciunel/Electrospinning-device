@@ -1,7 +1,7 @@
 <h1>Project Structure</h1>
 <h2>Main Files</h2>
 <ol>
-    <li><strong>main.cpp</strong>: Here the <code>setup()</code> function and <code>loop()</code> function are defined, initializing all tasks and starting the main program.</li>
+    <li><strong>main.cpp</strong>: Here, the <code>setup()</code> function and <code>loop()</code> function are defined, initializing all tasks and starting the main program.</li>
 </ol>
 
 <h2>Modules</h2>
@@ -18,5 +18,6 @@
     <li><strong>motorsTask()</strong>: This function controls the motors and interacts with them.</li>
 </ol>
 
-<h2>Build files</h2>
-<p> as HEX is located on <a href=".pio/build/megaatmega2560/firmware.hex">HEX. </a></p>
+<h2>Build Files</h2>
+<p>The HEX file is located at <a href=".pio/build/megaatmega2560/firmware.hex">HEX.</a></p>
+<p>To upload the HEX file, you need the <a href="https://github.com/binaryupdates/xLoader">xLoader</a> app. After downloading, run <b>XLoader.exe</b>.</p>
