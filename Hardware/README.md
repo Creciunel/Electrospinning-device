@@ -7,27 +7,28 @@
 <table style="border: none;">
   <tr>
     <td style="border: none; text-align: left;">
+        <h3>Display</h3>
         <table>
             <tr>
                 <th>Arduino pins</th>
                 <th>ILI9341 pins</th>
             </tr>
             <tr>
-                <td>48</td>
+                <td>A2</td>
                 <td>CD_PIN</td>
             </tr>
             <tr>
-                <td>53</td>
+                <td>A3</td>
                 <td>CS_PIN</td>
             </tr>
             <tr>
-                <td>49</td>
+                <td>A4</td>
                 <td>RESET_PIN</td>
             </tr>
-            <tr>
+            <!-- <tr>
                 <td>47</td>
                 <td>SD_PIN</td>
-            </tr>
+            </tr> -->
             <tr>
                 <td>51</td>
                 <td>MOSI_PIN</td>

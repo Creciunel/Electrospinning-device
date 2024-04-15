@@ -60,8 +60,6 @@
     <td>
       <h3>High voltage schematic</h3>
         <img src="Images/HVS.jpg" alt="High voltage source" style="max-width: 100%;">
-      <h3>General control scheme</h3>
-        <img src="Images/MCU.jpg" alt="Main control" style="max-width: 100%;">
     </td>
     <td>
       <h3>Block diagram of the circuit</h3>
