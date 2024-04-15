@@ -8,6 +8,8 @@
 #include <semphr.h>
 #include "task.h"
 
+// #include <AFMotor.h>
+
 #include "adc.h"
 #include "display.h"
 #include "motor.h"
@@ -20,6 +22,8 @@ void motorsTask(void *pvParameters);
 // Semaphore handle
 SemaphoreHandle_t ADC_Semaphore;
 
+// Connect a stepper motor with 48 steps per revolution (7.5 degree)
+// to motor port #2 (M3 and M4)
 uint16_t adcValue;
 uint8_t status;
 
