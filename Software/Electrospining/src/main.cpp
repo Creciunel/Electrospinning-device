@@ -29,10 +29,7 @@ uint32_t runTime;   // minutes
 
 uint16_t motorSpeed = 0; // rpm
 
-struct Flag
-{
-  uint8_t start;
-} flag;
+struct Flag flag;
 
 void setup(void)
 {

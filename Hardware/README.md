@@ -8,6 +8,7 @@
     <tr>
         <td style="border: none; text-align: left;">
             <h3>Display</h3>
+            <!-- https://github.com/WeActStudio/WeActStudio.TFT-LCD-Module -->
             <table>
                 <tr>
                     <th>Arduino Pins</th>
