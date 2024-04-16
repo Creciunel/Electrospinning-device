@@ -29,17 +29,12 @@
         <td>0 to 100 or more</td>
     </tr>
     <tr>
-        <td><code>n</code></td>
-        <td>0 to 100 or more</td>
-    </tr>
-    <tr>
         <td><code>t</code></td>
         <td>0 to 100 or more</td>
     </tr>
 </table>
 <ul>
-    <li><code>s</code> - comes from start/stop</li>
-    <li><code>m</code> - comes from motor speed</li>
-    <li><code>n</code> - comes from motor numbers of revolution</li>
-    <li><code>t</code> - comes from time</li>
+    <li><code>s</code> - comes from start/stop, 0 or 1 for seted </li>
+    <li><code>m</code> - comes from motor speed and is seted in rot/min</li>
+    <li><code>t</code> - comes from time, seted time for proces in minutes</li>
 </ul>

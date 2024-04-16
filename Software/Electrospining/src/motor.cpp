@@ -12,10 +12,14 @@ void motorsTask(void *pvParameters)
 
     // loop
     for (;;)
-    {
-        //  steps, dir, style
-        motor.step(stepsNr, FORWARD, SINGLE);
+    {   
+        if (flag.start)
+        {
+            stepsNr = runTime * motorSpeed;
+            //  steps, dir, style
+            motor.step(stepsNr, FORWARD, SINGLE);
+        }
 
-        vTaskDelay(pdMS_TO_TICKS(1000));
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
 }

@@ -67,10 +67,11 @@
     </td>
   </tr>
 </table>
-
-<p>See more about <a href="/Hardware/README.md">hardware.</a></p>
-<p>See more about <a href="/Software/UI/README.md">software UI.</a></p>
-<p>See more about <a href="/Software/Electrospining/README.md">softoare board code.</a></p>
+<ul>
+  <li>See more about <a href="/Hardware/README.md">hardware.</a></li>
+  <li>See more about <a href="/Software/UI/README.md">software UI.</a></li>
+  <li>See more about <a href="/Software/Electrospining/README.md">softoare board code.</a></li>
+</ul>
 
 <h2>Usage</h2>
 
@@ -84,9 +85,7 @@
 </ol>
 
 <h2>Contributing</h2>
-
 <p>Contributions to this project are welcome. Please fork the repository, make your changes, and submit a pull request.</p>
 
 <h2>License</h2>
-
 <p>This project is licensed under the <a href="LICENSE">MIT License</a>.</p>

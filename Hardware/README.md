@@ -90,4 +90,5 @@
     </tr>
 </table>
 
-<h2>ADC is connected to pin A8 or as number 62</h2>
+<h3>ADC analog-to-digital converter</h3>
+<p>it is connected to pin A8 or as number 62</p>

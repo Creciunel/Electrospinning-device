@@ -12,6 +12,8 @@
 #include "display.h"
 #include "motor.h"
 
+#define SECONDS_TO_MINUTES(seconds) ((seconds) / 60.0)
+
 void displayTask(void *pvParameters);
 void voltageMasureTask(void *pvParameters);
 void motorsTask(void *pvParameters);
@@ -20,10 +22,12 @@ void motorsTask(void *pvParameters);
 SemaphoreHandle_t ADC_Semaphore;
 
 uint16_t adcValue;
-uint8_t status;
+uint8_t status = 1; // init without problems
+
+uint32_t startTime; // seconds
+uint32_t runTime;   // minutes
 
 uint16_t motorSpeed = 0; // rpm
-uint16_t stepsNr = 100;
 
 struct Flag
 {
@@ -43,15 +47,31 @@ void setup(void)
 
 void loop(void)
 {
+
+  TickType_t xTickCount;
+  uint32_t ulTickCountSeconds;
+
+  xTickCount = xTaskGetTickCount();
+
+  // Convertim tick-urile în secunde
+  ulTickCountSeconds = xTickCount / configTICK_RATE_HZ;
+
   // Main comunicate protocol
   if (status)
   {
-    // messages  format:status, stop/start, voltage, speed, time.
+    // messages  format:status, stop/start, voltage, speed, seted time, actual runing time.
     xSemaphoreGive(ADC_Semaphore);
 
-    Serial.println(status + "," + String(voltageValue()) + "," + motorSpeed + ",0,0");
+    Serial.println(status + "," + String(flag.start) + "," + String(voltageValue()) + "," + motorSpeed + ",0,0");
   }
 
+  // Check if seted time for work are already done
+  if (SECONDS_TO_MINUTES(ulTickCountSeconds) - SECONDS_TO_MINUTES(startTime) >= runTime && flag.start)
+  {
+    flag.start = 0;
+  }
+
+  // Read command from Windows app  
   if (Serial.available() > true)
   {
     char key = Serial.read();
@@ -59,13 +79,16 @@ void loop(void)
     switch (key)
     {
     case 'm':
-      motorSpeed = val;
-      break;
-    case 'n':
-      stepsNr = val;
+      motorSpeed = val; //rot/min
       break;
     case 's':
       flag.start = val;
+
+      if (flag.start)
+        startTime = ulTickCountSeconds; // get start time
+      break;
+    case 't':
+      runTime = val; // min
       break;
     default:
       status = 0;
