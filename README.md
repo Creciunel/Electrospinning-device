@@ -1,18 +1,20 @@
-<h1>Electrospinning Device based on Arduino Mega</h1>
-
-<p>This repository contains the source code, hardware schematics, and documentation for a device designed to facilitate the electrospinning process using the Arduino Mega microcontroller. The device allows control and monitoring of various parameters involved in electrospinning, enabling researchers and enthusiasts to experiment with this technique.</p>
-
 <h2>Contents</h2>
 
 <ul>
   <li><a href="#features">Features</a></li>
   <li><a href="#hardware-setup">Hardware Setup</a></li>
+  <li><a href="#software-ui">Software UI</a></li>
+  <li><a href="#software-board-code">Software Board Code</a></li>
   <li><a href="#usage">Usage</a></li>
   <li><a href="#contributing">Contributing</a></li>
   <li><a href="#license">License</a></li>
 </ul>
 
-<h2>Features</h2>
+<h1>Electrospinning Device based on Arduino Mega</h1>
+
+<p>This repository contains the source code, hardware schematics, and documentation for a device designed to facilitate the electrospinning process using the Arduino Mega microcontroller. The device allows control and monitoring of various parameters involved in electrospinning, enabling researchers and enthusiasts to experiment with this technique.</p>
+
+<h2 id="features">Features</h2>
 
 <p>The device provides the following features:</p>
 <ul>
@@ -24,28 +26,14 @@
   <li>L293D driver for regulating the amount that passes through the syringe.</li>
 </ul>
 
-<h2>Hardware Setup</h2>
+<h2 id="hardware-setup">Hardware Setup</h2>
 
 <table>
   <tr>
     <th>
       <p>The hardware setup consists of the following components:</p>
     </th>
-    <th>It works as</th>
-  </tr>
   <tr>
-    <td>
-      <ul>
-        <li>ZVS driver</li>
-        <li>Flyback transformer</li>
-        <li>Capacitors</li>
-        <li>Voltage divider</li>
-        <li>Arduino Mega microcontroller</li>
-        <li>ILI9341 screen with touch</li>
-        <li>2 motors</li>
-        <li>L293D driver</li>
-      </ul>
-  </td>
     <td>
       <ul>
         <li><b>The high voltage power supply</b> generates the high voltage needed for the electrospinning process. Its role is to provide a stable and adjustable voltage source to create the electrostatic field required to draw the polymer solution into nanofibers.</li>
@@ -58,19 +46,20 @@
   </tr>
   <tr>
     <td>
-      <h3>High voltage schematic</h3>
-        <img src="Images/HVS.jpg" alt="High voltage source" style="max-width: 100%;">
-    </td>
-    <td>
       <h3>Block diagram of the circuit</h3>
         <img src="Images/Block-diagram1.jpg" alt="Main control" style="max-width: 100%;">
     </td>
   </tr>
 </table>
+
+<h2 id="software-ui">Software UI</h2>
 <ul>
-  <li>See more about <a href="/Hardware/README.md">hardware.</a></li>
   <li>See more about <a href="/Software/UI/README.md">software UI.</a></li>
-  <li>See more about <a href="/Software/Electrospining/README.md">softoare board code.</a></li>
+</ul>
+
+<h2 id="software-board-code">Software Board Code</h2>
+<ul>
+  <li>See more about <a href="/Software/Electrospining/README.md">software board code.</a></li>
 </ul>
 
 <h2>Usage</h2>

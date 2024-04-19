@@ -34,12 +34,6 @@ void displayTask(void *pvParameters)
         // Retrieve a point
         TSPoint p = ts.getPoint();
 
-        /*
-         Serial.print("X = "); Serial.print(p.x);
-         Serial.print("\tY = "); Serial.print(p.y);
-         Serial.print("\tPressure = "); Serial.println(p.z);
-        */
-
         // we have some minimum pressure we consider 'valid'
         // pressure of 0 means no pressing!
         if (p.z < MINPRESSURE || p.z > MAXPRESSURE)
@@ -50,12 +44,6 @@ void displayTask(void *pvParameters)
         // Scale from ~0->1000 to tft.width using the calibration #'s
         p.x = map(p.x, TS_MINX, TS_MAXX, 0, tft.width());
         p.y = map(p.y, TS_MINY, TS_MAXY, 0, tft.height());
-
-        /*
-        Serial.print("("); Serial.print(p.x);
-        Serial.print(", "); Serial.print(p.y);
-        Serial.println(")");
-        */
 
         if (p.y < BOXSIZE)
         {
