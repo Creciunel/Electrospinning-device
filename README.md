@@ -51,6 +51,9 @@
     </td>
   </tr>
 </table>
+<ul>
+  <li>See more about <a href="/Hardware/README.md">hardware Setup</a></li>
+</ul>
 
 <h2 id="software-ui">Software UI</h2>
 <ul>

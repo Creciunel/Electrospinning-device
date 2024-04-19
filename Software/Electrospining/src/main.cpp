@@ -56,10 +56,10 @@ void loop(void)
   // Main comunicate protocol
   if (status)
   {
-    // messages  format:status, stop/start, voltage, speed, seted time, actual runing time.
+    // messages  format:status, stop/start, voltage, speed, seted time, actual, runing time.
     xSemaphoreGive(ADC_Semaphore);
 
-    Serial.println(status + "," + String(flag.start) + "," + String(voltageValue()) + "," + motorSpeed + ",0,0");
+    Serial.println(status + "," + String(flag.start) + "," + String(voltageValue()) + "," + motorSpeed + "," + String(SECONDS_TO_MINUTES(ulTickCountSeconds)) + "," + String(SECONDS_TO_MINUTES(ulTickCountSeconds) - SECONDS_TO_MINUTES(startTime)));
   }
 
   // Check if seted time for work are already done
@@ -68,7 +68,7 @@ void loop(void)
     flag.start = 0;
   }
 
-  // Read command from Windows app  
+  // Read command from Windows app
   if (Serial.available() > true)
   {
     char key = Serial.read();
@@ -76,7 +76,7 @@ void loop(void)
     switch (key)
     {
     case 'm':
-      motorSpeed = val; //rot/min
+      motorSpeed = val; // rot/min
       break;
     case 's':
       flag.start = val;
