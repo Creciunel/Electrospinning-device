@@ -63,7 +63,7 @@
     </td>
     <td>
       <h3>Block diagram of the circuit</h3>
-        <img src="Images/Block-diagram.jpg" alt="Main control" style="max-width: 100%;">
+        <img src="Images/Block-diagram1.jpg" alt="Main control" style="max-width: 100%;">
     </td>
   </tr>
 </table>

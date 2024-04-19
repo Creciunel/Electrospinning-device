@@ -1,7 +1,7 @@
 #include "display.h"
 
 
-Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
+Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
 
 // For better pressure precision, we need to know the resistance
 // between X+ and X- Use any multimeter to read it

@@ -25,10 +25,10 @@
 #include "TouchScreen.h"
 
 // These are the four touchscreen analog pins
-#define YP A2 // must be an analog pin, use "An" notation!
-#define XM A3 // must be an analog pin, use "An" notation!
-#define YM 8  // can be any digital pin
-#define XP 9  // can be any digital pin
+#define YP A14 // must be an analog pin, use "An" notation!
+#define XM A15 // must be an analog pin, use "An" notation!
+#define YM 48  // can be any digital pin
+#define XP 49  // can be any digital pin
 
 // This is calibration data for the raw touch data to the screen coordinates
 #define TS_MINX 150
@@ -40,8 +40,11 @@
 #define MAXPRESSURE 1000
 
 // The display uses hardware SPI, plus #9 & #10
-#define TFT_CS 10
-#define TFT_DC 9
+#define TFT_CS      53
+#define TFT_DC      46
+#define TFT_MOSI    51
+#define TFT_SCLK    52
+#define TFT_RST     47
 
 // Size of the color selection boxes and the paintbrush size
 #define BOXSIZE 40

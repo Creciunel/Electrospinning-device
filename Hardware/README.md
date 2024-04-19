@@ -15,32 +15,49 @@
                     <th>ILI9341 Pins</th>
                 </tr>
                 <tr>
-                    <td>A2</td>
-                    <td>CD_PIN</td>
+                    <td>53</td>
+                    <td>TFT_CS</td>
                 </tr>
                 <tr>
-                    <td>A3</td>
-                    <td>CS_PIN</td>
+                    <td>46</td>
+                    <td>TFT_DC</td>
                 </tr>
-                <tr>
-                    <td>A4</td>
-                    <td>RESET_PIN</td>
-                </tr>
-                <!-- <tr>
-                    <td>47</td>
-                    <td>SD_PIN</td>
-                </tr> -->
                 <tr>
                     <td>51</td>
-                    <td>MOSI_PIN</td>
+                    <td>TFT_MOSI</td>
                 </tr>
                 <tr>
                     <td>52</td>
-                    <td>SCK_PIN</td>
+                    <td>TFT_SCLK</td>
+                </tr>
+                <tr>
+                    <td>47</td>
+                    <td>TFT_RST</td>
+                </tr>
+                <tr>
+                    <th>Arduino Pins</th>
+                    <th>TouchScreen Pins</th>
+                </tr>
+                <tr>
+                    <td>A14</td>
+                    <td>YP</td>
+                </tr>
+                <tr>
+                    <td>A15</td>
+                    <td>XM</td>
+                </tr>
+                <tr>
+                    <td>48</td>
+                    <td>YM</td>
+                </tr>
+                <tr>
+                    <td>49</td>
+                    <td>XP</td>
                 </tr>
             </table>
         </td>
         <td style="border: none; text-align: right;">
+            <h3>Motor</h3>
             <table>
                 <tr>
                     <th>Arduino Pins</th>
