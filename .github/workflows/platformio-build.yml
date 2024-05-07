@@ -11,21 +11,22 @@ jobs:
 
   setup:
     runs-on: ubuntu-latest
-    
     steps:
-      # Checkout repository
+      - name: Run setup
+        run: pwd
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+     # Checkout repository
       - name: Checkout code
         uses: actions/checkout@v4
       
       # Setup PlatformIO in PATH
       - name: Setup PlatformIO
         uses: n-vr/setup-platformio-action@v1
-
-  build:
-    needs: [setup]
-    runs-on: ubuntu-latest
-
-    steps:
+      
       # Build the PlatformIO project
       - name: Build PlatformIO project
         run: cd Software/Electrospining && pio run
