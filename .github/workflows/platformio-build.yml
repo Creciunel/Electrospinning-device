@@ -25,10 +25,23 @@ jobs:
      # Checkout repository
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          fetch-depth: 0
 
       # Setup Python
       - name: Setup Python
         uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          architecture: 'x64'
+
+      # Setup python 2.7
+      - name: Setup Python 2.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: '2.7'
+          architecture: 'x64'
       
       # Setup PlatformIO in PATH
       - name: Setup PlatformIO
