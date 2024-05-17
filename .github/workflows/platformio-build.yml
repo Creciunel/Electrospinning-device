@@ -32,8 +32,13 @@ jobs:
       
       # Build the PlatformIO project
       - name: Build PlatformIO project
-        run: cd Software/Electrospining && pio run
-      
+        run: |
+          cd Software/Electrospining
+          pio run
+          # Move output files to a directory
+          mkdir -p output
+          mv build output
+        
       # Upload build artifact
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
@@ -46,12 +51,14 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v3
+      # Checkout repository
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
         with:
           name: platformio-build
-          path: Software/Electrospining/build
+          path: Software/Electrospining/output
       
+      # Run PlatformIO test
       - name: Test PlatformIO project
         run: cd Software/Electrospining && pio test -e megaatmega2560 -v
 
@@ -59,6 +66,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
+      # Deploy
       - name: Deploy
         run: echo "Deploying..."
 
