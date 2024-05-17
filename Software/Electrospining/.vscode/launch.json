@@ -9,6 +9,25 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "C/C++ Runner: Debug Session",
+            "type": "cppdbg",
+            "request": "launch",
+            "args": [],
+            "stopAtEntry": false,
+            "externalConsole": false,
+            "cwd": "/home/crc/Documents/Electrospinning-device/Software/Electrospining/src",
+            "program": "/home/crc/Documents/Electrospinning-device/Software/Electrospining/src/build/Debug/outDebug",
+            "MIMode": "gdb",
+            "miDebuggerPath": "/home/crc/.platformio/packages/toolchain-atmelavr/bin/avr-gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug",

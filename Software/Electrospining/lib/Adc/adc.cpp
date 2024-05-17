@@ -8,6 +8,9 @@ void voltageMasureTask(void *pvParameters)
     // Create semaphore
     ADC_Semaphore = xSemaphoreCreateBinary();
 
+    // Set ADC pin as input
+    pinMode(ADC_PIN, INPUT);
+
     // loop
     for (;;)
     {
