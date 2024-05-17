@@ -1,5 +1,6 @@
 #include "adc.h"
 
+
 void voltageMasureTask(void *pvParameters)
 {
     // setup
@@ -31,6 +32,15 @@ void voltageMasureTask(void *pvParameters)
     }
 }
 
+/**
+ * get ADC value
+ * @return Voltage value
+ * @note ADC_RESOLUTION * xSemaphoreGive(ADC_Semaphore) - voltage from 10K ohms resistor
+ * (ADC_RESOLUTION * xSemaphoreGive(ADC_Semaphore)) * VOLTAGE_GAIN - Output voltage
+ * @note Voltage value is not less than 0 and not more than 30000
+ * @note ADC value is not less than 0 and not more than 1023
+ * @note Voltage value = (ADC_RESOLUTION * ADC value) * VOLTAGE_GAIN
+*/
 int voltageValue(void){
     // ADC_RESOLUTION * xSemaphoreGive(ADC_Semaphore) - voltage from 10K ohms resistor
     // (ADC_RESOLUTION * xSemaphoreGive(ADC_Semaphore)) * VOLTAGE_GAIN - Output voltage
