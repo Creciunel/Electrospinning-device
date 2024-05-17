@@ -15,13 +15,13 @@ void tearDown(void)
 {
 }
 
-// test if value is not less that 0 after ADC function
+// test if value is not less than 0 after ADC function
 // check if ADC function is not less than 0
 // check if voltage value is not less than 0
 void test_voltage_value_is_not_less_than_0(void)
 {
     // Check if voltage value is not less than 0
-    TEST_ASSERT_GREATER_THAN(voltageValue(), 0);
+    TEST_ASSERT_GREATER_THAN(0, voltageValue());
 }
 
 // test if voltage from ADC is not bigger than 30000V
@@ -29,10 +29,10 @@ void test_voltage_value_is_not_less_than_0(void)
 void test_voltage_value_is_not_greater_than_30000(void)
 {
     // Check if ADC value is not more than 30000
-    TEST_ASSERT_GREATER_THAN(voltageValue(), 30000);
+    TEST_ASSERT_LESS_THAN(30000, voltageValue());
 }
 
-// runt unit tests in test mode
+// run unit tests in test mode
 void run_tests(void)
 {
     UNITY_BEGIN();
@@ -71,9 +71,8 @@ void loop()
 // run test
 int main(int argc, char **argv)
 {
-    UNITY_BEGIN();
-    RUN_TEST(test_adc);
-    UNITY_END();
+    run_tests();
+    return 0;
 }
 
 #endif

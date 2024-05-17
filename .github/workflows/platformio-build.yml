@@ -51,7 +51,7 @@ jobs:
           path: build
       
       - name: Test PlatformIO project
-        run: cd Software/Electrospining && pio test
+        run: cd Software/Electrospining && pio test -e megaatmega2560 -v
 
   deploy:
     needs: test

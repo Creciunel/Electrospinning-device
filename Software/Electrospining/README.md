@@ -19,5 +19,5 @@
 </ol>
 
 <h2>Build Files</h2>
-<p>The HEX file is located at <a href=".pio/build/megaatmega2560/firmware.hex">HEX.</a></p>
+<p>The HEX file is located at <a href="build/firmware.hex">HEX.</a></p>
 <p>To upload the HEX file, you need the <a href="https://github.com/binaryupdates/xLoader">xLoader</a> app. After downloading, run <b>XLoader.exe</b>.</p>
