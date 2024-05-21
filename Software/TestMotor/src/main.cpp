@@ -14,6 +14,8 @@ AF_Stepper motor(STEPS, STEPPERNR); // uint16_t steps - revolution per steps, ui
 
 void setup()
 {
+  Serial.begin(115200);
+
   motor.setSpeed(motorSpeed); // is good 10 rpm
 }
 
@@ -22,4 +24,6 @@ void loop()
   uint16_t stepsNr = runTime * motorSpeed;
   //  steps, dir, style
   motor.step(stepsNr, FORWARD, SINGLE);
+
+  delay(20);
 }
