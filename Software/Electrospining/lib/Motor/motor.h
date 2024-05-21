@@ -17,7 +17,7 @@
 #include <AFMotor.h>
 
 #define STEPPERNR   2
-#define STEPS       48
+#define STEPS       200
 
 extern struct Flag {
     uint8_t start;
