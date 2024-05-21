@@ -1,5 +1,11 @@
 #include "display.h"
 
+// Arduino_DataBus *bus = new Arduino_HWSPI(TFT_CS, TFT_DC, TFT_SCK, TFT_MOSI, TFT_MISO);
+// Arduino_GFX *gfx = new Arduino_ILI9341(bus, TFT_RST, 0);
+
+// XPT2046_Touchscreen ts(TOUCH_CS, TOUCH_INT);
+
+
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
 

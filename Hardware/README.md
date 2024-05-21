@@ -1,18 +1,98 @@
 # Electrospinning Device based on Arduino Mega
 
 Arduino Mega pinout is  
-<img src="/Images/Arduino-Mega-Pinout.jpg" alt="Arduino Mega pinout" width="100px">
+<img src="/Images/Arduino-Mega-Pinout.jpg" alt="Arduino Mega pinout" width="300px">
 
 ## Hardware Connection
 
 <table style="border: none;">
   <tr>
+    <h3>Display</h3>
+    <!-- display charaters -->
+    <ul>
+        <li> Examples of <a href="https://github.com/WeActStudio/WeActStudio.TFT-LCD-Module/tree/master/Examples">code</a> </li>
+        <li> <a href="https://github.com/WeActStudio/WeActStudio.TFT-LCD-Module">WeActStudio.TFT-LCD-Module</a> </li>
+    </ul>
     <td style="border: none; text-align: left;">
-      <img src="/Images/Display.webp" alt="Display" style="max-width: 100px; float: left; margin-right: 10px;">
-      <h3>Display</h3>
+      <img src="/Images/Display.webp" alt="Display" width="300px">
+      <img src="/Images/displayPins.png" alt="pinout" width="300px">
       <!-- https://github.com/WeActStudio/WeActStudio.TFT-LCD-Module -->
-      <table>
+      <!-- <table>
         <tr>
+            <th>Arduino Pins</th>
+            <th>ILI9341 Pins</th>
+        </tr>
+        <tr>
+            <td>3.3V or 5V</td>
+            <td>VCC</td>
+        </tr>
+        <tr>
+            <td>GND</td>
+            <td>GND</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>BL</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>RES</td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>SDO (MISO)</td>
+        </tr>
+        <tr>
+            <td>11</td>
+            <td>SDA (MOSI)</td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>D/C</td>
+        </tr>
+        <tr>
+            <td>13</td>
+            <td>SCL (SCK)</td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>CS</td>
+        </tr>
+        <tr>
+            <td>Not connected</td>
+            <td>FM</td>
+        </tr>
+        <tr>
+            <th>Arduino Pins</th>
+            <th>TouchScreen Pins</th>
+        </tr>
+        <tr>
+            <td>13</td>
+            <td>TSCK (SCK)</td>
+        </tr>
+        <tr>
+            <td>14</td>
+            <td>TCS (CS)</td>
+        </tr>
+        <tr>
+            <td>15</td>
+            <td>TMOSI (MOSI)</td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>TMISO (MISO)</td>
+        </tr>
+        <tr>
+            <td>17</td>
+            <td>TPEN (Touch Interrupt)</td>
+        </tr>
+        <tr>
+            <td>GND</td>
+            <td>GND</td>
+        </tr>
+    </table> -->
+ <table>
+    <tr>
           <th>Arduino Pins</th>
           <th>ILI9341 Pins</th>
         </tr>
@@ -59,10 +139,11 @@ Arduino Mega pinout is
       </table>
     </td>
   </tr>
+
   <tr>
+    <h3>Motor</h3>
     <td style="border: none; text-align: left;">
-      <img src="/Images/L293DArduinoShieldPinouts.png" alt="L293D Motor Driver Shield" style="max-width: 100px; float: left; margin-right: 10px;">
-      <h3>Motor</h3>
+      <img src="/Images/L293DArduinoShieldPinouts.png" alt="L293D Motor Driver Shield" width="300px">    
       <table>
         <tr>
           <th>Arduino Pins</th>

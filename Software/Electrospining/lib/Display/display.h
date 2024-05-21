@@ -24,6 +24,24 @@
 #include <Adafruit_ILI9341.h>
 #include "TouchScreen.h"
 
+// #include <Arduino_GFX_Library.h>
+// #include <XPT2046_Touchscreen.h>
+
+// #define TFT_BL 6
+// #define TFT_RST 7
+// #define TFT_MISO 12
+// #define TFT_MOSI 11
+// #define TFT_DC 8
+// #define TFT_SCK 13
+// #define TFT_CS 9
+
+// #define TOUCH_SCK 13
+// #define TOUCH_CS 14
+// #define TOUCH_MOSI 15
+// #define TOUCH_MISO 12
+// #define TOUCH_INT 17
+
+
 // These are the four touchscreen analog pins
 #define YP A14 // must be an analog pin, use "An" notation!
 #define XM A15 // must be an analog pin, use "An" notation!
