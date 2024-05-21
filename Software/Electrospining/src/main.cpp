@@ -14,7 +14,7 @@
 
 #define SECONDS_TO_MINUTES(seconds) ((seconds) / 60.0)
 
-void displayTask(void *pvParameters);
+// void displayTask(void *pvParameters);
 void voltageMasureTask(void *pvParameters);
 void motorsTask(void *pvParameters);
 
@@ -33,9 +33,12 @@ struct Flag flag;
 
 void setup(void)
 {
+  pinMode(13, OUTPUT);
+  digitalWrite(13, LOW);
+
   Serial.begin(115200);
 
-  xTaskCreate(displayTask, "Dysplay info", 1000, NULL, 1, NULL);
+  // xTaskCreate(displayTask, "Dysplay info", 1000, NULL, 1, NULL);
   xTaskCreate(voltageMasureTask, "Masure voltage", 1000, NULL, 1, NULL);
   xTaskCreate(motorsTask, "Connect motors", 1000, NULL, 1, NULL);
 
@@ -94,5 +97,6 @@ void loop(void)
     }
   }
 
+  digitalWrite(13, !digitalRead(13));
   vTaskDelay(pdMS_TO_TICKS(1000));
 }
