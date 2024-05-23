@@ -3,9 +3,9 @@
 
 <h3>Steps for Using the Device and Protocol</h3>
 <ul>
-    <li>The app has a dropdown menu for viewing and selecting available COM ports.</li>
+    <li>The app has a dropdown menu for viewing and selecting available COM ports. It runs on 15200 baud.</li>
     <li>It also has a button to connect to the device and informs us if the connection was successful or if the connection was lost.</li>
-    <li>There is a window where we can see the voltage, one for motor speed, and the last one for time (actual/necessary for the process), and all the parameters can also be adjusted.</li>
+    <li>There is a label where we can see the voltage, one for motor speed, and the last one for time (actual/necessary for the process), and all the parameters can also be adjusted.</li>
     <li>The protocol sends messages in the format: <code>status, start/stop, voltage, speed, total time, runing time.</code> When the device is working, we have two values for time: one is the total time needed for the experiment and the other is the actual time in the process.</li>
     <li>There are also two buttons for starting and stopping the process.</li>
     <li>The protocol looks like this: <code>1,1,9000,50,60,3</code>. If the process is not running, then the last value of the status state is false (0).</li>
@@ -21,10 +21,6 @@
         <th>Value</th>
     </tr>
     <tr>
-        <td><code>s</code></td>
-        <td>1 or 0</td>
-    </tr>
-    <tr>
         <td><code>m</code></td>
         <td>0 to 100 or more</td>
     </tr>
@@ -32,9 +28,13 @@
         <td><code>t</code></td>
         <td>0 to 100 or more</td>
     </tr>
+    <tr>
+        <td><code>s</code></td>
+        <td>1 or 0</td>
+    </tr>
 </table>
-<ul>
-    <li><code>s</code> - comes from start/stop, 0 or 1 for seted </li>
+<ul>    
     <li><code>m</code> - comes from motor speed and is seted in rot/min</li>
     <li><code>t</code> - comes from time, seted time for proces in minutes</li>
+    <li><code>s</code> - comes from start/stop, 0 or 1 for seted </li>
 </ul>
