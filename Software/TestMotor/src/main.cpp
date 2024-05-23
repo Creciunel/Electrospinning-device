@@ -70,9 +70,11 @@ void loop()
         curMotorTime = millis();
       }
     }
-  }else{
+  }
+  else
+  {
     // stop moptor
-    motor.setSpeed(0); 
+    motor.setSpeed(0);
   }
 
   if (millis() - curAdcTime > ADCDELAY)
@@ -104,7 +106,17 @@ void loop()
         break;
       case 's':
         flag.start = val;
-        Serial.println("1, start: " + String(flag.start));
+
+        if (val == 1)
+        {
+          flag.start = true;
+        }
+        else
+        {
+          flag.start = false;
+        }
+
+        Serial.println("1, start: " + String(flag.start) + " val: " + String(val));
         if (flag.start)
           // get time in minutes
           startTime = millis(); // get start time
