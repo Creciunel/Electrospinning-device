@@ -70,6 +70,9 @@ void loop()
         curMotorTime = millis();
       }
     }
+  }else{
+    // stop moptor
+    motor.setSpeed(0); 
   }
 
   if (millis() - curAdcTime > ADCDELAY)
