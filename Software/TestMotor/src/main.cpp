@@ -17,7 +17,7 @@
 
 uint16_t motorSpeed = 10;
 uint32_t startTime = 100;
-uint32_t runTime = 5000;
+uint32_t runTime = 0;
 
 uint16_t adcValue;
 
@@ -56,16 +56,19 @@ void loop()
   {
     if (millis() - curMotorTime > MOTORDELAY)
     {
-      // motor Speed
-      motor.setSpeed(motorSpeed); // is good 10 rpm
+      if (startTime - millis() >= runTime) // if time not over
+      {
+        // motor Speed
+        motor.setSpeed(motorSpeed); // is good 10 rpm
 
-      // motor steps
-      uint16_t stepsNr = runTime * motorSpeed;
-      
-      //  steps, dir, style
-      motor.step(stepsNr, FORWARD, SINGLE);
+        // motor steps
+        uint16_t stepsNr = runTime * motorSpeed;
 
-      curMotorTime = millis();
+        //  steps, dir, style
+        motor.step(stepsNr, FORWARD, SINGLE);
+
+        curMotorTime = millis();
+      }
     }
   }
 
@@ -99,11 +102,12 @@ void loop()
         flag.start = val;
 
         if (flag.start)
-        // get time in minutes
-          startTime = millis()/60000; // get start time
+          // get time in minutes
+          startTime = millis(); // get start time
         break;
       case 't':
-        runTime = val; // min
+        // transgorm from min in ms
+        runTime = val * 60 * 1000;
         break;
       default:
         flag.status = 0;
