@@ -105,7 +105,7 @@ void loop()
         Serial.println("1, motorSpeed: " + String(motorSpeed) + " rpm");
         break;
       case 's':
-        flag.start = val;
+        // flag.start = val;
 
         if (val == 1)
         {
