@@ -12,7 +12,7 @@
 #define ADC_RESOLUTION 5.0 / 1024.0
 #define VOLTAGE_GAIN 20000
 
-#define PRINT_DELAY 1000
+#define PRINT_DELAY 5000
 #define COMMUNICATION_DELAY 100
 
 uint16_t motorSpeed = 10;
@@ -97,10 +97,11 @@ void loop()
       {
       case 'm':
         motorSpeed = val; // rot/min
+        Serial.println("1, motorSpeed: " + String(motorSpeed) + " rpm");
         break;
       case 's':
         flag.start = val;
-
+        Serial.println("1, start: " + String(flag.start));
         if (flag.start)
           // get time in minutes
           startTime = millis(); // get start time
@@ -108,6 +109,7 @@ void loop()
       case 't':
         // transgorm from min in ms
         runTime = val * 60 * 1000;
+        Serial.println("1, runTime: " + String(runTime / 60 / 1000) + " min");
         break;
       default:
         flag.status = 0;
