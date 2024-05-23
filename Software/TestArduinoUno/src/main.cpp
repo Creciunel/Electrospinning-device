@@ -80,6 +80,7 @@ void loop()
   // send
   if (millis() - curPrintTime > PRINT_DELAY)
   {
+    // status, start/stop, voltage, speed, total time, runing time
     Serial.println(status + "," + String(flag.start) + "," + String(voltageValue(adcValue)) + "," + motorSpeed + "," + String(SECONDS_TO_MINUTES(startTime)) + "," + String(SECONDS_TO_MINUTES(millis() / 60000) - SECONDS_TO_MINUTES(startTime)));
 
     curPrintTime = millis();
@@ -100,15 +101,6 @@ void loop()
         break;
       case 's':
         flag.start = val;
-
-        if (val == 1)
-        {
-          flag.start = true;
-        }
-        else
-        {
-          flag.start = false;
-        }
 
         // Serial.println("1, start: " + String(flag.start) + " val: " + String(val));
         if (flag.start)
