@@ -30,7 +30,7 @@ AF_Stepper motor(STEPS, STEPPERNR); // uint16_t steps - revolution per steps, ui
 struct Flag
 {
   uint8_t status = 1;
-  uint8_t start = 0;
+  bool start = false;
 } flag;
 
 int voltageValue(uint16_t adcValue)
@@ -52,9 +52,10 @@ void setup()
 
 void loop()
 {
-  if (flag.start)
+
+  if (millis() - curMotorTime > MOTORDELAY)
   {
-    if (millis() - curMotorTime > MOTORDELAY)
+    if (flag.start)
     {
       if (startTime - millis() >= runTime) // if time not over
       {
@@ -69,12 +70,9 @@ void loop()
 
         curMotorTime = millis();
       }
+    }else{
+      motor.setSpeed(0); // is good 10 rpm
     }
-  }
-  else
-  {
-    // stop moptor
-    motor.setSpeed(0);
   }
 
   if (millis() - curAdcTime > ADCDELAY)
