@@ -96,7 +96,7 @@ void loop()
       {
       case 'm':
         motorSpeed = val; // rot/min
-        Serial.println("1, motorSpeed: " + String(motorSpeed) + " rpm");
+        // Serial.println("1, motorSpeed: " + String(motorSpeed) + " rpm");
         break;
       case 's':
         flag.start = val;
@@ -110,7 +110,7 @@ void loop()
           flag.start = false;
         }
 
-        Serial.println("1, start: " + String(flag.start) + " val: " + String(val));
+        // Serial.println("1, start: " + String(flag.start) + " val: " + String(val));
         if (flag.start)
           // get time in minutes
           startTime = millis(); // get start time
@@ -118,11 +118,11 @@ void loop()
       case 't':
         // transgorm from min in ms
         runTime = val * 60 * 1000;
-        Serial.println("1, runTime: " + String(runTime / 60 / 1000) + " min");
+        // Serial.println("1, runTime: " + String(runTime / 60 / 1000) + " min");
         break;
       default:
         flag.status = 0;
-        Serial.println("-2, Wrong message! key: " + String(key) + ", val: " + String(val));
+        // Serial.println("-2, Wrong message! key: " + String(key) + ", val: " + String(val));
         break;
       }
     }
