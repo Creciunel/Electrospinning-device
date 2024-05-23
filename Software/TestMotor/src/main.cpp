@@ -44,8 +44,6 @@ void setup()
 {
   Serial.begin(115200);
 
-  motor.setSpeed(motorSpeed); // is good 10 rpm
-
   curPrintTime = millis();
   curAdcTime = millis();
   curMotorTime = millis();
@@ -58,8 +56,12 @@ void loop()
   {
     if (millis() - curMotorTime > MOTORDELAY)
     {
+      // motor Speed
+      motor.setSpeed(motorSpeed); // is good 10 rpm
 
+      // motor steps
       uint16_t stepsNr = runTime * motorSpeed;
+      
       //  steps, dir, style
       motor.step(stepsNr, FORWARD, SINGLE);
 
