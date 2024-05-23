@@ -17,7 +17,7 @@ Arduino Mega pinout is
       <img src="/Images/Display.webp" alt="Display" width="300px">
       <img src="/Images/displayPins.png" alt="pinout" width="300px">
       <!-- https://github.com/WeActStudio/WeActStudio.TFT-LCD-Module -->
-      <!-- <table>
+      <table>
         <tr>
             <th>Arduino Pins</th>
             <th>ILI9341 Pins</th>
@@ -90,8 +90,8 @@ Arduino Mega pinout is
             <td>GND</td>
             <td>GND</td>
         </tr>
-    </table> -->
- <table>
+    </table>
+ <!-- <table>
     <tr>
           <th>Arduino Pins</th>
           <th>ILI9341 Pins</th>
@@ -136,7 +136,7 @@ Arduino Mega pinout is
           <td>49</td>
           <td>XP</td>
         </tr>
-      </table>
+      </table> -->
     </td>
   </tr>
 
