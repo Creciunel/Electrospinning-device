@@ -14,7 +14,7 @@
 #define PRINT_DELAY 1000
 #define COMMUNICATION_DELAY 100
 
-#define SECONDS_TO_MINUTES(seconds) ((seconds) / 60.0)
+#define MillisecondsToMinutes(milliseconds) ((milliseconds) / 60000.0) // SECONDS_TO_MINUTES(seconds) ((seconds) / 60.0)
 
 uint16_t motorSpeed = 10;
 uint32_t startTime = 0;
@@ -59,7 +59,7 @@ void loop()
 {
   if (flag.start)
   {
-    if (millis() - curMotorTime > MOTORDELAY)
+    if (millis() - curMotorTime >= MOTORDELAY)
     {
       uint16_t stepsNr = runTime * motorSpeed;
       // steps, dir, style
@@ -69,7 +69,7 @@ void loop()
     }
   }
 
-  if (millis() - curAdcTime > ADCDELAY)
+  if (millis() - curAdcTime >= ADCDELAY)
   {
     adcValue = analogRead(ADC_PIN);
     curAdcTime = millis();
@@ -79,7 +79,7 @@ void loop()
   if (millis() - curPrintTime > PRINT_DELAY)
   {
     // status, start/stop, voltage, speed, total time, running time
-    Serial.println(String(status) + "," + String(flag.start) + "," + String(voltageValue(adcValue)) + "," + String(motorSpeed) + "," + String(SECONDS_TO_MINUTES(startTime)) + "," + String(SECONDS_TO_MINUTES(millis() / 60000.0) - SECONDS_TO_MINUTES(startTime)));
+    Serial.println(String(status) + "," + String(flag.start) + "," + String(voltageValue(adcValue)) + "," + String(motorSpeed) + "," + String(MillisecondsToMinutes(startTime)) + "," + String(MillisecondsToMinutes(millis()) - MillisecondsToMinutes(startTime)));
 
     curPrintTime = millis();
   }
@@ -115,4 +115,5 @@ void loop()
     }
     curCommunicationTime = millis();
   }
+  
 }
