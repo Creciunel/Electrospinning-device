@@ -21,75 +21,79 @@ Arduino Mega pinout is
         <tr>
             <th>Arduino Pins</th>
             <th>ILI9341 Pins</th>
-        </tr>
-        <tr>
-            <td>3.3V or 5V</td>
-            <td>VCC</td>
-        </tr>
-        <tr>
-            <td>GND</td>
-            <td>GND</td>
-        </tr>
-        <tr>
-            <td>6</td>
-            <td>BL</td>
-        </tr>
-        <tr>
-            <td>7</td>
-            <td>RES</td>
-        </tr>
-        <tr>
-            <td>12</td>
-            <td>SDO (MISO)</td>
-        </tr>
-        <tr>
-            <td>11</td>
-            <td>SDA (MOSI)</td>
-        </tr>
-        <tr>
-            <td>8</td>
-            <td>D/C</td>
-        </tr>
-        <tr>
-            <td>13</td>
-            <td>SCL (SCK)</td>
-        </tr>
-        <tr>
-            <td>9</td>
-            <td>CS</td>
-        </tr>
-        <tr>
-            <td>Not connected</td>
-            <td>FM</td>
-        </tr>
-        <tr>
+            <th></tr>
             <th>Arduino Pins</th>
             <th>TouchScreen Pins</th>
         </tr>
         <tr>
+            <td>3.3V or 5V</td>
+            <td>VCC</td>
+            <td></td>
             <td>13</td>
             <td>TSCK (SCK)</td>
         </tr>
         <tr>
+            <td>GND</td>
+            <td>GND</td>
+            <td></td>
             <td>14</td>
             <td>TCS (CS)</td>
         </tr>
         <tr>
+            <td>6</td>
+            <td>BL</td>
+            <td></td>
             <td>15</td>
             <td>TMOSI (MOSI)</td>
         </tr>
         <tr>
+            <td>7</td>
+            <td>RES</td>
+            <td></td>
             <td>12</td>
             <td>TMISO (MISO)</td>
         </tr>
         <tr>
+            <td>12</td>
+            <td>SDO (MISO)</td>
+            <td></td>
             <td>17</td>
             <td>TPEN (Touch Interrupt)</td>
         </tr>
         <tr>
+            <td>11</td>
+            <td>SDA (MOSI)</td>
+            <td></td>
             <td>GND</td>
             <td>GND</td>
         </tr>
+        <tr>
+            <td>8</td>
+            <td>D/C</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>13</td>
+            <td>SCL (SCK)</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>CS</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Not connected</td>
+            <td>FM</td>
+            <td></td>
+            <td></td>
+            <td></td>
     </table>
  <!-- <table>
     <tr>
@@ -148,43 +152,68 @@ Arduino Mega pinout is
         <tr>
           <th>Arduino Pins</th>
           <th>L293D Motor Driver Shield</th>
+          <th></th>
+          <th>Motor sheld sheft registers 74HCT595</th>
+          <th>Pin</th>
         </tr>
         <tr>
           <td>11</td>
           <td>Motor 1</td>
+          <td></td>
+          <td>MOTOR1_A</td>
+          <td>2</td>
         </tr>
         <tr>
           <td>3</td>
           <td>Motor 2</td>
+          <td></td>
+          <td>MOTOR1_B</td>
+          <td>3</td>
         </tr>
         <tr>
           <td>5</td>
           <td>Motor 3</td>
+          <td></td>
+          <td>MOTOR2_A</td>
+          <td>1</td>
         </tr>
         <tr>
           <td>6</td>
           <td>Motor 4</td>
+          <td></td>
+          <td>MOTOR2_B</td>
+          <td>4</td>
         </tr>
         <tr>
           <td>9</td>
           <td>Servo 1</td>
+          <td></td>
+          <td>MOTOR3_A</td>
+          <td>5</td>
         </tr>
         <tr>
           <td>10</td>
           <td>Servo 2</td>
+          <td></td>
+          <td>MOTOR3_B</td>
+          <td>7</td>
         </tr>
         <tr>
           <td>4, 7, 8, 12</td>
           <td>Shift registers</td>
+          <td></td>
+          <td>MOTOR4_A</td>
+          <td>0</td>
         </tr>
         <tr>
           <td>2 and 13, Analog A0 to A5</td>
           <td>Not Connected</td>
+          <td></td>
+          <td>MOTOR4_B</td>
+          <td>6</td>
         </tr>
       </table>
-    </td>
-  </tr>
-</table>
+
 
 ### ADC Analog-to-Digital Converter
 

@@ -7,7 +7,7 @@
 #define MOTORDELAY 100 // 0.1 seconds
 
 #define ADC_PIN A0   // ADC pin
-#define ADCDELAY 100 // 0.1 seconds
+#define ADCDELAY 1000 // 1 seconds
 #define ADC_RESOLUTION 5.0 / 1024.0
 #define VOLTAGE_GAIN 20000
 
@@ -25,9 +25,7 @@ uint16_t adcValue;
 uint32_t curMotorTime = 0;
 uint32_t curAdcTime = 0;
 uint32_t curPrintTime = 0;
-uint32_t curCommunicationTime = 0;
-
-uint8_t status = 1;
+uint32_t startMomentTime = 0;
 
 AF_Stepper motor(STEPS, STEPPERNR); // uint16_t steps - revolution per steps, uint8_t num - stepper num connectet to sheeld
 struct Flag
@@ -52,7 +50,7 @@ void setup()
   curPrintTime = millis();
   curAdcTime = millis();
   curMotorTime = millis();
-  curCommunicationTime = millis();
+  startMomentTime = millis();
 }
 
 void loop()
@@ -79,14 +77,14 @@ void loop()
   if (millis() - curPrintTime > PRINT_DELAY)
   {
     // status, start/stop, voltage, speed, total time, running time
-    Serial.println(String(status) + "," + String(flag.start) + "," + String(voltageValue(adcValue)) + "," + String(motorSpeed) + "," + String(MillisecondsToMinutes(startTime)) + "," + String(MillisecondsToMinutes(millis()) - MillisecondsToMinutes(startTime)));
+    Serial.println(String(flag.status) + "," + String(flag.start) + "," + String(voltageValue(adcValue)) + "," + String(motorSpeed) + "," + String(MillisecondsToMinutes(millis()) -MillisecondsToMinutes(startMomentTime)) + "," + String(MillisecondsToMinutes(millis()) - MillisecondsToMinutes(startTime)));
 
     curPrintTime = millis();
   }
 
   // read command
-  if (millis() - curCommunicationTime > COMMUNICATION_DELAY)
-  {
+  // if (millis() - curCommunicationTime > COMMUNICATION_DELAY)
+  // {
     if (Serial.available() > 0)
     {
       char key = Serial.read();
@@ -101,7 +99,11 @@ void loop()
         flag.start = val;
         if (flag.start)
         {
+          // start
           startTime = millis(); // get start time
+        }else{
+          // stop
+          motor.release();
         }
         break;
       case 't':
@@ -109,11 +111,12 @@ void loop()
         runTime = val * 60 * 1000;
         break;
       default:
-        status = 0;
+        flag.status = -2;
+        Serial.println("-2, Wrong message! key: " + String(key) + ", val: " + String(val));
         break;
       }
     }
-    curCommunicationTime = millis();
-  }
+  //   curCommunicationTime = millis();
+  // }
   
 }
