@@ -101,11 +101,14 @@ void loop()
       {
         // start
         startTime = millis(); // get start time
-      }
-      else
+        motor.setSpeed(motorSpeed);
+      }else
       {
         // stop
         motor.release();
+        motor.setSpeed(0);
+        // print stop motor
+        Serial.println("0,0,0,0,0,0");
       }
       break;
     case 't':

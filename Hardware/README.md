@@ -21,7 +21,7 @@ Arduino Mega pinout is
         <tr>
             <th>Arduino Pins</th>
             <th>ILI9341 Pins</th>
-            <th></tr>
+            <th></th>
             <th>Arduino Pins</th>
             <th>TouchScreen Pins</th>
         </tr>
