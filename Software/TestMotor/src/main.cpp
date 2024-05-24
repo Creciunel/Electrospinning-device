@@ -107,6 +107,7 @@ void loop()
         // stop
         motor.release();
         motor.setSpeed(0);
+        motor.step(0, FORWARD, SINGLE);
         // print stop motor
         Serial.println("0,0,0,0,0,0");
       }
