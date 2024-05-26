@@ -4,6 +4,7 @@
 .vscode/launch.json
 .vscode/ipch
 .vscode
-Software/Electrospining
-Software/TestArduinoUno
-Software/TestMotor
+/Software/Electrospining
+/Software/TestArduinoUno
+/Software/TestESP32S3
+/Software/TestMotor
