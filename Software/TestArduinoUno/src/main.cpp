@@ -20,8 +20,6 @@ uint16_t motorSpeed = 10;
 uint32_t startTime = 0;
 uint32_t runTime = 5000;
 
-uint16_t adcValue;
-
 uint32_t curMotorTime = 0;
 uint32_t curAdcTime = 0;
 uint32_t curPrintTime = 0;
@@ -44,6 +42,8 @@ int voltageValue(uint16_t adcValue)
 void setup()
 {
   Serial.begin(115200);
+  // print initial menu
+  Serial.println("m- motor speed, t- time for runing, s-start");
 
   motor.setSpeed(motorSpeed); // is good 10 rpm
 
@@ -67,17 +67,11 @@ void loop()
     }
   }
 
-  if (millis() - curAdcTime >= ADCDELAY)
-  {
-    adcValue = analogRead(ADC_PIN);
-    curAdcTime = millis();
-  }
-
   // send
   if (millis() - curPrintTime > PRINT_DELAY)
   {
     // status, start/stop, voltage, speed, total time, running time
-    Serial.println(String(flag.status) + "," + String(flag.start) + "," + String(voltageValue(adcValue)) + "," + String(motorSpeed) + "," + String(MillisecondsToMinutes(millis()) -MillisecondsToMinutes(startMomentTime)) + "," + String(MillisecondsToMinutes(millis()) - MillisecondsToMinutes(startTime)));
+    Serial.println(String(flag.status) + "," + String(flag.start) + "," + String(voltageValue(analogRead(ADC_PIN))) + "," + String(motorSpeed) + "," + String(MillisecondsToMinutes(millis()) -MillisecondsToMinutes(startMomentTime)) + "," + String(MillisecondsToMinutes(millis()) - MillisecondsToMinutes(startTime)));
 
     curPrintTime = millis();
   }
