@@ -6,6 +6,6 @@
 /Software/Electrospining
 /Software/TestArduinoUno
 /Software/TestESP32S3
-/Software/TestMotor
+# /Software/TestMotor
 /Software/*
 !/Software/UI/

@@ -1,7 +1,13 @@
 # Electrospinning Device based on Arduino Mega
 
-<a href="https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ProductDocuments/DataSheets/ATmega640-1280-1281-2560-2561-Datasheet-DS40002211A.pdf">Arduino</a> Mega pinout is  
-<img src="/Images/Arduino-Mega-Pinout.jpg" alt="Arduino Mega pinout" width="300px">
+## High voltage result and schematics
+
+### Reult
+
+<p> The result of the electrospinning process is accesible on link below. </p>
+<a href="https://docs.google.com/spreadsheets/d/1FEkuDaI_2rEFF1M06S9z06Yd7cQ-smT4pYeCvJsIN_U/edit?usp=sharing">Value on testing process</a>
+
+### Schematics
 
 ## Hardware Connection
 
