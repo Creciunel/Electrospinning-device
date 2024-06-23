@@ -1,6 +1,6 @@
 # Electrospinning Device based on Arduino Mega
 
-Arduino Mega pinout is  
+<a href="https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ProductDocuments/DataSheets/ATmega640-1280-1281-2560-2561-Datasheet-DS40002211A.pdf">Arduino</a> Mega pinout is  
 <img src="/Images/Arduino-Mega-Pinout.jpg" alt="Arduino Mega pinout" width="300px">
 
 ## Hardware Connection
@@ -151,7 +151,7 @@ Arduino Mega pinout is
       <table>
         <tr>
           <th>Arduino Pins</th>
-          <th>L293D Motor Driver Shield</th>
+          <th><a href="https://github.com/adafruit/Adafruit_Motor-Shield-v1/blob/master/mshieldv12schem.png">L293D Motor Driver Shield</a></th>
           <th></th>
           <th>Motor sheld sheft registers 74HCT595</th>
           <th>Pin</th>
