@@ -31,8 +31,6 @@ void setup()
 {
   // close relay
   digitalWrite(RELAY, LOW);
-  digitalWrite(RELAY1, LOW);
-
   Serial.begin(115200);
   delay(100); // Give time for Serial to initialize
 
@@ -81,15 +79,11 @@ void loop()
       {
         flag.start = 0;
         digitalWrite(RELAY, LOW);
-        digitalWrite(RELAY1, LOW);
       }
 
       else
-      {
         flag.start = 1;
-        digitalWrite(RELAY, HIGH);
-        digitalWrite(RELAY1, HIGH);
-      }
+      digitalWrite(RELAY, HIGH);
 
       Serial.println("Encoder cklick start, value: " + String(flag.start));
       lcd.setCursor(5, 1);
@@ -182,12 +176,8 @@ void loop()
         if (flag.start == 0)
         {
           digitalWrite(RELAY, LOW);
-          digitalWrite(RELAY1, LOW);
-        }
-        else
-        {
+        }else{
           digitalWrite(RELAY, HIGH);
-          digitalWrite(RELAY1, HIGH);
         }
 
         Serial.println("command: s, value: " + String(flag.start));
