@@ -1,0 +1,149 @@
+#include "main.h"
+
+// Motor constants
+uint16_t motorSpeed = 1;                 // Viteza motorului (pași pe secundă)
+uint16_t motorDelay = 1000 / motorSpeed; // Întârzierea între pași în milisecunde
+uint8_t motorDirection = LOW;            // Direcția motorului (LOW sau HIGH)
+
+// Time constants
+uint32_t curMotorTime = 0;
+uint32_t curPrintTime = 0;
+uint32_t curCommunicationTime = 0;
+uint32_t curEncoderTime = 0;
+
+// Encoder și LCD
+Encoder enc(CLK, DT, SW, TYPE1);
+LiquidCrystal_I2C lcd(ADDRESS, 16, 2);
+
+struct Flag
+{
+  uint8_t start = 0;
+} flag;
+
+int voltageValue(uint16_t adcValue)
+{
+  return (ADC_RESOLUTION * adcValue) * VOLTAGE_GAIN;
+}
+void checkEncoder();
+
+void setup()
+{
+  // init motor pins
+  pinMode(DIR_PIN, OUTPUT);
+  pinMode(PUL_PIN, OUTPUT);
+  pinMode(ENA_PIN, OUTPUT);
+
+  digitalWrite(ENA_PIN, LOW);  // Activează driverul
+  digitalWrite(DIR_PIN, HIGH); // Setează direcția
+
+  // init transformer pin
+  pinMode(PWM_PIN, OUTPUT);
+
+  // Setare Timer0 pentru a obține o frecvență de aproximativ 15.625 kHz
+  TCCR0A = (1 << WGM00) | (1 << WGM01); // Mod PWM rapid
+  TCCR0B = (1 << CS01);                 // Prescaler de 8
+
+  Serial.begin(115200);
+  delay(100);
+
+  Serial.println("System Initialized\r\n");
+  Serial.println("Available commands:\r\n");
+  Serial.println("m <value> - Set motor speed (steps per second)\r\n");
+  Serial.println("s <0/1> - Stop/Start motor\r\n");
+  Serial.println("d <0/1> - Set motor direction (0 = BACKWARD, 1 = FORWARD)\r\n");
+  Serial.println("p <0/255> - Set PWM value for Transformer\r\n");
+
+  curPrintTime = millis();
+  curMotorTime = millis();
+  curCommunicationTime = millis();
+  curEncoderTime = millis();
+
+  // LCD
+  lcd.init();
+  lcd.backlight();
+
+  lcd.setCursor(0, 0);
+  lcd.print("V:" + String(int(voltageValue(analogRead(ADC_PIN)) / 1000.0)));
+
+  lcd.setCursor(5, 0);
+  lcd.print("kV RPM:" + String(motorSpeed));
+
+  lcd.setCursor(0, 1);
+
+  if (motorDirection == HIGH)
+    lcd.print("d:F");
+  else
+    lcd.print("d:B");
+
+  lcd.setCursor(5, 1);
+
+  lcd.print("s:" + String(flag.start));
+}
+
+void loop() {
+    // Verifică encoderul în fiecare iterație
+    enc.tick();
+
+    // Verifică starea encoderului
+    checkEncoder();
+
+    // Controlul motorului pas cu pas fără delay
+    if (flag.start && millis() - curMotorTime >= motorDelay) {
+        curMotorTime = millis();
+        
+        digitalWrite(PUL_PIN, HIGH); // Trimite impuls
+        delayMicroseconds(100);       // Durata impulsului
+        digitalWrite(PUL_PIN, LOW);   // Oprește impulsul
+        delayMicroseconds(100);       // Pauză între impulsuri
+    }
+
+    // Actualizarea LCD-ului la intervale regulate
+    if (millis() - curPrintTime >= PRINT_DELAY) {
+        curPrintTime = millis();
+        
+        lcd.setCursor(0, 0);
+        lcd.print("V:" + String(int(voltageValue(analogRead(ADC_PIN)) / 1000.0)));
+    }
+
+    // Comunicația serială
+    if (millis() - curCommunicationTime >= COMMUNICATION_DELAY) {
+        curCommunicationTime = millis();
+
+        if (Serial.available() > 0) {
+            char key = Serial.read();
+            int val = Serial.parseInt();
+
+            int pwmValue; // Declară pwmValue aici
+
+            switch (key) {
+                case 's':
+                    flag.start = val;
+                    digitalWrite(ENA_PIN, flag.start ? LOW : HIGH); // Activează/dezactivează driverul
+                    break;
+                case 'd':
+                    motorDirection = val ? HIGH : LOW;
+                    digitalWrite(DIR_PIN, motorDirection);
+                    break;
+                case 'm':
+                    motorSpeed = val;
+                    motorDelay = max(1000 / motorSpeed, 1); // Asigură că întârzierea nu devine zero
+                    break;
+                case 'p':
+                    pwmValue = val;
+
+                    if (pwmValue > 255)
+                        pwmValue = 255;
+                    else if (pwmValue < 0)
+                        pwmValue = 0;
+
+                    analogWrite(PWM_PIN, pwmValue);
+                    Serial.println("command: p, value: " + String(pwmValue));
+                    break;
+                default:
+                    Serial.println("Wrong command! key: " + String(key) + ", val: " + String(val));
+                    break;
+            }
+        }
+    }
+}
+
