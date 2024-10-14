@@ -7,220 +7,257 @@ void vTaskCommunication(void *pvParameters);
 void vTaskTransformer(void *pvParameters);
 
 // Motor constants
-uint16_t motorSpeed = 1;
-uint16_t motorDelay = 1000 / motorSpeed;
-uint8_t motorDirection = LOW;
+uint8_t motorSpeed = 1;       // Viteza motorului
+uint8_t motorDirection = LOW; // Direcția motorului
 
 // Transformer variables
 uint8_t pwmValue = 0;
 
 // Encoder și LCD
-Encoder enc(CLK, DT, SW, TYPE1);
+// Create a global pointer for the encoder object
+Encoder enc(CLK, DT, SW);
 LiquidCrystal_I2C lcd(ADDRESS, 16, 2);
+MWCSTEPPER tb6600(ENA_PIN, DIR_PIN, PUL_PIN); // Inițializează driverul motorului
 
 struct Flag
 {
-  uint8_t start = 0;
+    uint8_t start = 0; // Starea de start/stop
 } flag;
 
 void setup()
 {
-  // Crearea sarcinilor
-  xTaskCreate(vTaskEncoder, "Encoder Task", 128, NULL, 2, NULL);
-  xTaskCreate(vTaskMotor, "Motor Task", 128, NULL, 1, NULL);
-  xTaskCreate(vTaskLCD, "LCD Task", 128, NULL, 1, NULL);
-  xTaskCreate(vTaskCommunication, "Communication Task", 128, NULL, 1, NULL);
-  xTaskCreate(vTaskTransformer, "Transformer Task", 128, NULL, 1, NULL);
+    Serial.begin(115200);
 
-  // Pornește scheduler-ul FreeRTOS
-  vTaskStartScheduler();
+    // Crearea sarcinilor
+    xTaskCreate(vTaskEncoder, "Encoder Task", 256, NULL, 1, NULL);
+    xTaskCreate(vTaskMotor, "Motor Task", 128, NULL, 1, NULL);
+    xTaskCreate(vTaskLCD, "LCD Task", 128, NULL, 1, NULL);
+    xTaskCreate(vTaskCommunication, "Communication Task", 128, NULL, 1, NULL);
+    xTaskCreate(vTaskTransformer, "Transformer Task", 128, NULL, 1, NULL);
 
-// Initializarea LCD
-  lcd.init(); // Asigură-te că LCD-ul este inițializat
-  lcd.backlight(); // Activează iluminarea de fundal
+    // Pornește scheduler-ul FreeRTOS
+    vTaskStartScheduler();
 
-  // initializarea seriala
-  Serial.begin(115200);
+    // Setare Timer0 pentru a obține o frecvență de aproximativ 7kHz
+    // Setează modul Fast PWM pentru Timer0
+    TCCR0A = (1 << WGM00) | (1 << WGM01); // Mod PWM rapid
+    TCCR0B = (1 << CS01) | (1 << CS00);   // Prescaler de 64
+
+    // Initializarea LCD
+    lcd.init();
+    lcd.backlight();
+
+    enc.setType(TYPE2);
 }
 
 void loop() {}
 
-void vTaskEncoder(void *pvParameters)
+void vTaskLCD(void *pvParameters)
 {
-  pinMode(SW, INPUT_PULLUP);
-  pinMode(CLK, INPUT_PULLUP);
-  pinMode(DT, INPUT_PULLUP);
+    // Initializarea LCD
+    lcd.init();
+    lcd.backlight();
 
-  for (;;)
-  {
-    enc.tick(); // Actualizează starea encoderului
+    for (;;)
+    {
+        lcd.clear();
 
-    checkEncoder();
+        switch (currentState)
+        {
+        case MAIN_MENU:
+            lcd.setCursor(0, 0);
+            lcd.print("1: Direction");
+            lcd.setCursor(0, 1);
+            lcd.print("2: Speed");
+            break;
 
-    vTaskDelay(100 / portTICK_PERIOD_MS); // Întârziere mai mică pentru reacții rapide
-  }
+        case SELECT_DIRECTION:
+            lcd.setCursor(0, 0);
+            lcd.print("Direction:");
+            lcd.setCursor(0, 1);
+            lcd.print(motorDirection == HIGH ? "F" : "B"); // F - Forward, B - Backward
+            break;
+
+        case SELECT_SPEED:
+            lcd.setCursor(0, 0);
+            lcd.print("Speed:");
+            lcd.setCursor(0, 1);
+            lcd.print(motorSpeed); // Afișează viteza curentă
+            break;
+
+        case SENSOR_VALUES:
+            lcd.setCursor(0, 0);
+            lcd.print("Voltage:" + String(int(voltageValue(analogRead(ADC_PIN)) / 1000.0)));
+            lcd.setCursor(0, 1);
+            lcd.print("T:");
+            lcd.setCursor(6, 1);
+            lcd.print("H:");
+            lcd.setCursor(11, 1);
+            lcd.print("P:");
+            break;
+        }
+
+        vTaskDelay(500 / portTICK_PERIOD_MS); // Actualizează LCD-ul la fiecare jumătate de secundă
+    }
 }
 
 void vTaskMotor(void *pvParameters)
 {
-  pinMode(DIR_PIN, OUTPUT);
-  pinMode(PUL_PIN, OUTPUT);
-  pinMode(ENA_PIN, OUTPUT);
+    digitalWrite(ENA_PIN, LOW); // Activează driverul
 
-  digitalWrite(ENA_PIN, LOW);
-  digitalWrite(DIR_PIN, HIGH);
-
-  for (;;)
-  {
-    if (flag.start)
+    for (;;)
     {
-      digitalWrite(PUL_PIN, HIGH);
-      delayMicroseconds(100);
-      digitalWrite(PUL_PIN, LOW);
-      delayMicroseconds(100);
+        if (flag.start)
+        {
+            tb6600.run(); // Rotește motorul la viteza setată
+        }
+        else
+        {
+            tb6600.active(false); // Oprește motorul
+        }
+        vTaskDelay(100 / portTICK_PERIOD_MS); // Delay pentru reacții rapide
     }
-    vTaskDelay(10 / portTICK_PERIOD_MS); // Delay mai mic pentru reacții rapide
-  }
 }
 
-void vTaskLCD(void *pvParameters)
+void vTaskEncoder(void *pvParameters)
 {
-  
-  lcd.init();
-  lcd.backlight();
-  
-  lcd.setCursor(0, 0);
-  lcd.print("V:" + String(int(voltageValue(analogRead(ADC_PIN)) / 1000.0)));
-  lcd.setCursor(5, 0);
-  lcd.print("kV RPM:" + String(motorSpeed));
-  lcd.setCursor(0, 1);
+    enc.setType(TYPE1);
+    static uint32_t lastCheckTime = 0;
 
-  if (motorDirection == HIGH)
-    lcd.print("d:F");
-  else
-    lcd.print("d:B");
+    for (;;)
+    {
+        enc.tick();
 
-  lcd.setCursor(5, 1);
-  lcd.print("s:" + String(flag.start));
+        if (millis() - lastCheckTime >= ENCODER_DELAY)
+        {
+            lastCheckTime = millis();
 
-  for (;;)
-  {
-    lcd.setCursor(0, 0);
-    lcd.print("V:" + String(int(voltageValue(analogRead(ADC_PIN)) / 1000.0)));
+            if (enc.isSingle())
+            {
+                // Schimbă starea meniului la apăsare
+                switch (currentState)
+                {
+                case MAIN_MENU:
+                    currentState = SELECT_DIRECTION;
+                    Serial.println("Select Direction");
+                    break;
+                case SELECT_DIRECTION:
+                    currentState = SELECT_SPEED;
+                    Serial.println("Select Speed");
+                    break;
+                case SELECT_SPEED:
+                    currentState = MAIN_MENU;
+                    Serial.println("Back to Main Menu");
+                    break;
+                case SENSOR_VALUES:
+                    currentState = MAIN_MENU;
+                    Serial.println("Back to Main Menu");
+                    break;
+                }
+            }
+            else if (enc.isDouble())
+            {
+                // Resetare la starea inițială
+                currentState = SENSOR_VALUES;
+                Serial.println("Sensor Values");
 
-    vTaskDelay(1000 / portTICK_PERIOD_MS); // Actualizează LCD-ul la fiecare secundă
-  }
+                if(flag.start){
+                    flag.start = false;
+                    Serial.println("Stop");
+                }else{
+                    flag.start = true;
+                    Serial.println("Start");
+                }
+            }
+            else if (currentState == SELECT_DIRECTION)
+            {
+                if (enc.isRight())
+                {
+                    motorDirection = HIGH; // Forward
+                    Serial.println("Direction: Forward");
+                }
+                else if (enc.isLeft())
+                {
+                    motorDirection = LOW; // Backward
+                    Serial.println("Direction: Backward");
+                }
+            }
+            else if (currentState == SELECT_SPEED)
+            {
+                if (enc.isRight())
+                {
+                    motorSpeed++;
+                    if (motorSpeed > 100)
+                        motorSpeed = 100;
+                    Serial.println("Speed: " + String(motorSpeed));
+                }
+                else if (enc.isLeft())
+                {
+                    motorSpeed--;
+                    if (motorSpeed < 1)
+                        motorSpeed = 1;
+                    Serial.println("Speed: " + String(motorSpeed));
+                }
+            }
+        }
+
+        vTaskDelay(50 / portTICK_PERIOD_MS); // Întârziere pentru reacții rapide
+    }
 }
 
 void vTaskTransformer(void *pvParameters)
 {
-  // init transformer pin
-  pinMode(PWM_PIN, OUTPUT);
 
-  // Setare Timer0 pentru a obține o frecvență de aproximativ 15.625 kHz
-  TCCR0A = (1 << WGM00) | (1 << WGM01);
-  TCCR0B = (1 << CS01);
+    // Setează modul Fast PWM pentru Timer0
+    TCCR0A = (1 << WGM00) | (1 << WGM01); // Mod PWM rapid
+    TCCR0B = (1 << CS01) | (1 << CS00);   // Prescaler de 64
 
-  for (;;)
-  {
-    analogWrite(PWM_PIN, pwmValue);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-  }
+    pinMode(PWM_PIN, OUTPUT);
+
+    for (;;)
+    {
+        analogWrite(PWM_PIN, pwmValue);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
 }
 
 void vTaskCommunication(void *pvParameters)
 {
-  Serial.println("System Initialized\r\n");
-  Serial.println("Available commands:\r\n");
-  Serial.println("m <value> - Set motor speed (steps per second)\r\n");
-  Serial.println("s <0/1> - Stop/Start motor\r\n");
-  Serial.println("d <0/1> - Set motor direction (0 = BACKWARD, 1 = FORWARD)\r\n");
-  Serial.println("p <0/255> - Set PWM value for Transformer\r\n");
+    Serial.println("System Initialized\r\n");
 
-  for (;;)
-  {
-    if (Serial.available() > 0)
+    for (;;)
     {
-      char key = Serial.read();
-      int val = Serial.parseInt();
-      
+        if (Serial.available() > 0)
+        {
+            char key = Serial.read();
+            int val = Serial.parseInt();
 
-      switch (key)
-      {
-      case 's':
-        flag.start = val;
-        digitalWrite(ENA_PIN, flag.start ? LOW : HIGH);
-        break;
-      case 'd':
-        motorDirection = val ? HIGH : LOW;
-        digitalWrite(DIR_PIN, motorDirection);
-        break;
-      case 'm':
-        motorSpeed = val;
-        motorDelay = max(1000 / motorSpeed, 1);
-        break;
-      case 'p':
-        pwmValue = val;
-
-        if (pwmValue > 255)
-          pwmValue = 255;
-        else if (pwmValue < 0)
-          pwmValue = 0;
-
-        Serial.println("command: p, value: " + String(pwmValue));
-        break;
-      default:
-        Serial.println("Wrong command! key: " + String(key) + ", val: " + String(val));
-        break;
-      }
+            switch (key)
+            {
+            case 's':
+                flag.start = val;
+                digitalWrite(ENA_PIN, flag.start ? LOW : HIGH); // Activează/dezactivează driverul
+                break;
+            case 'd':
+                motorDirection = val ? HIGH : LOW;
+                tb6600.set(motorDirection == HIGH ? CLOCKWISE : COUNTERCLOCKWISE, motorSpeed, PULSE); // Setează direcția și viteza
+                break;
+            case 'm':
+                motorSpeed = val;
+                break;
+            case 'p':
+                pwmValue = val;
+                if (pwmValue > 255)
+                    pwmValue = 255;
+                else if (pwmValue < 0)
+                    pwmValue = 0;
+                Serial.println("command: PWM, value: " + String(pwmValue));
+                break;
+            default:
+                Serial.println("Wrong command! key: " + String(key) + ", val: " + String(val));
+                break;
+            }
+        }
+        vTaskDelay(100 / portTICK_PERIOD_MS);
     }
-    vTaskDelay(100 / portTICK_PERIOD_MS);
-  }
-}
-
-void checkEncoder()
-{
-  static uint32_t lastCheckTime = 0;
-
-  if (millis() - lastCheckTime >= ENCODER_DELAY)
-  {
-    lastCheckTime = millis();
-
-    if (enc.isClick())
-    {
-      flag.start = !flag.start;
-      digitalWrite(ENA_PIN, flag.start ? LOW : HIGH);
-      lcd.setCursor(5, 1);
-      lcd.print("s:" + String(flag.start));
-      Serial.println("command: s, value: " + String(flag.start));
-    }
-    else if (enc.isDouble())
-    {
-      motorDirection = !motorDirection;
-      digitalWrite(DIR_PIN, motorDirection);
-      lcd.setCursor(0, 1);
-      lcd.print(motorDirection ? "d:F" : "d:B");
-      Serial.println("command: d, value: " + String(motorDirection));
-    }
-    else if (enc.isRight())
-    {
-      motorSpeed++;
-      if (motorSpeed > 100)
-        motorSpeed = 100;
-      motorDelay = max(1000 / motorSpeed, 1);
-      lcd.setCursor(5, 0);
-      lcd.print("kV RPM:" + String(motorSpeed));
-      Serial.println("command: m, value: " + String(motorSpeed));
-    }
-    else if (enc.isLeft())
-    {
-      motorSpeed--;
-      if (motorSpeed < 1)
-        motorSpeed = 1;
-      motorDelay = max(1000 / motorSpeed, 1);
-      lcd.setCursor(5, 0);
-      lcd.print("kV RPM:" + String(motorSpeed));
-      Serial.println("command: m, value: " + String(motorSpeed));
-    }
-  }
 }
