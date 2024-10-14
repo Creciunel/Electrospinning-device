@@ -10,19 +10,20 @@
 #include <mwc_stepper.h>
 #include <GyverEncoder.h>
 
+
 #define ADDRESS           0x27 // I2C address
 #define SCL_PIN          21
 #define SDA_PIN          20
 
 // Definește pinii pentru TB6600
-#define DIR_PIN          46    // DIR+
+#define DIR_PIN           46    // DIR+
 #define PUL_PIN          44    // PUL+
 #define ENA_PIN          48   // ENA+
 
 #define CLOCKWISE 1
 #define COUNTERCLOCKWISE 0
 
-#define PULSE 200
+#define PULSE 200 
 
 // ADC constants
 #define ADC_PIN          A8 // ADC pin
