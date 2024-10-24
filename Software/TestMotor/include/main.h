@@ -7,23 +7,37 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 
+#include <AFMotor.h>
+
 #include <mwc_stepper.h>
 #include <GyverEncoder.h>
+
+#include <avr/wdt.h>
 
 
 #define ADDRESS           0x27 // I2C address
 #define SCL_PIN          21
 #define SDA_PIN          20
 
-// Definește pinii pentru TB6600
-#define DIR_PIN           46    // DIR+
-#define PUL_PIN          44    // PUL+
-#define ENA_PIN          48   // ENA+
+// Definește pinii pentru TB6600 Stepper motor 1
+#define DIR_PIN1          46    // DIR+
+#define PUL_PIN1          44    // PUL+
+#define ENA_PIN1          48   // ENA+
+
+// Define pinii pentru TB6600 Stepper motor 2
+#define DIR_PIN2          47    // DIR+
+#define PUL_PIN2          45    // PUL+
+#define ENA_PIN2          49   // ENA+
 
 #define CLOCKWISE 1
 #define COUNTERCLOCKWISE 0
 
-#define PULSE 200 
+#define FULL_STEP 200 
+#define HALF_STEP 400 
+#define QUARTER_STEP 800
+#define EIGHTH_STEP 1600
+#define SIXTEENTH_STEP 3200
+#define THIRTYTWO_STEP 6400
 
 // ADC constants
 #define ADC_PIN          A8 // ADC pin
@@ -51,14 +65,15 @@
 #define RELAY             30
 #define RELAY1            32
 
-#define PWM_PIN          13 
+#define EN_HIGH_VOLTAGE   13 
 
 // display state
 enum MenuState {
     MAIN_MENU,
     SELECT_DIRECTION,
-    SELECT_SPEED,
-    SENSOR_VALUES
+    SELECT_MOTOR1_SPEED,
+    SELECT_MOTOR2_SPEED,
+    SENSOR_VALUES,
 };
 
 MenuState currentState = MAIN_MENU;

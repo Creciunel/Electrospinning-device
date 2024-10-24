@@ -4,17 +4,17 @@ void vTaskEncoder(void *pvParameters);
 void vTaskMotor(void *pvParameters);
 void vTaskLCD(void *pvParameters);
 void vTaskCommunication(void *pvParameters);
-void vTaskTransformer(void *pvParameters);
 void vTaskSensor(void *pvParameters);
 
 // Motor constants
-uint8_t motorSpeed = 1;       // Viteza motorului
+uint8_t motor1Speed = 1;
+uint8_t motor2Speed = 25;    // Viteza motorului
 uint8_t motorDirection = LOW; // Direcția motorului
 
 // Transformer variables
 uint8_t pwmValue = 0;
 
-float voltage = 0.0;
+float voltage = 0.0;  
 float temperature = 0.0;
 float humidity = 0.0;
 float pressure = 0.0;
@@ -23,7 +23,10 @@ float pressure = 0.0;
 // Create a global pointer for the encoder object
 Encoder enc(CLK, DT, SW, TYPE1);
 LiquidCrystal_I2C lcd(ADDRESS, 16, 2);
-MWCSTEPPER tb6600(ENA_PIN, DIR_PIN, PUL_PIN); // Inițializează driverul motorului
+MWCSTEPPER tb6600_m1(ENA_PIN1, DIR_PIN1, PUL_PIN1); // Inițializează driverul motorului
+
+AF_DCMotor motor(1);
+
 
 struct Flag
 {
@@ -34,25 +37,27 @@ void setup()
 {
     Serial.begin(115200);
 
+    wdt_enable(WDTO_2S);
+
     // Crearea sarcinilor
     xTaskCreate(vTaskEncoder, "Encoder Task", 512, NULL, 1, NULL);
-    xTaskCreate(vTaskMotor, "Motor Task", 128, NULL, 1, NULL);
-    xTaskCreate(vTaskLCD, "LCD Task", 128, NULL, 1, NULL);
+    xTaskCreate(vTaskMotor, "Motor Task", 256, NULL, 1, NULL);
+    xTaskCreate(vTaskLCD, "LCD Task", 256, NULL, 1, NULL);
     xTaskCreate(vTaskCommunication, "Communication Task", 128, NULL, 1, NULL);
-    xTaskCreate(vTaskTransformer, "Transformer Task", 128, NULL, 1, NULL);
     xTaskCreate(vTaskSensor, "Sensor Task", 256, NULL, 1, NULL);
 
     // Pornește scheduler-ul FreeRTOS
     vTaskStartScheduler();
 
     // Setare Timer0 pentru a obține o frecvență de aproximativ 7kHz
-    // Setează modul Fast PWM pentru Timer0
-    TCCR0A = (1 << WGM00) | (1 << WGM01); // Mod PWM rapid
-    TCCR0B = (1 << CS01) | (1 << CS00);   // Prescaler de 64
+    pinMode(EN_HIGH_VOLTAGE, OUTPUT);
 
     // Initializarea LCD
     lcd.init();
     lcd.backlight();
+
+    motor.setSpeed(motor2Speed);
+    motor.run(RELEASE);
 }
 
 void loop() {}
@@ -65,29 +70,38 @@ void vTaskLCD(void *pvParameters)
 
     for (;;)
     {
+        wdt_reset();
+
         lcd.clear();
 
         switch (currentState)
         {
         case MAIN_MENU:
             lcd.setCursor(0, 0);
-            lcd.print("1: Direction");
-            lcd.setCursor(0, 1);
-            lcd.print("2: Speed");
+            lcd.print("Electrospinning");
+            lcd.setCursor(11, 1);
+            lcd.print("setup");
             break;
 
         case SELECT_DIRECTION:
             lcd.setCursor(0, 0);
             lcd.print("Direction:");
             lcd.setCursor(0, 1);
-            lcd.print(motorDirection == HIGH ? "Forward" : "Backward"); 
+            lcd.print(motorDirection == LOW ? "Forward" : "Backward");
             break;
 
-        case SELECT_SPEED:
+        case SELECT_MOTOR1_SPEED:
             lcd.setCursor(0, 0);
-            lcd.print("Speed:");
+            lcd.print("Motor 1 speed:");
             lcd.setCursor(0, 1);
-            lcd.print(motorSpeed); // Afișează viteza curentă
+            lcd.print(int(motor1Speed)); // Afișează viteza curentă
+            break;
+
+        case SELECT_MOTOR2_SPEED:
+            lcd.setCursor(0, 0);
+            lcd.print("Motor 2 speed:");
+            lcd.setCursor(0, 1);
+            lcd.print(int(motor2Speed)); // Afișează viteza curentă
             break;
 
         case SENSOR_VALUES:
@@ -99,16 +113,8 @@ void vTaskLCD(void *pvParameters)
             lcd.print("H:" + String((int)(humidity)));
             lcd.setCursor(10, 1);
             lcd.print("P:" + String((int)(pressure)));
-            if (flag.start)
-            {
-                lcd.setCursor(11, 0);
-                lcd.print("Start");
-            }
-            else
-            {
-                lcd.setCursor(11, 0);
-                lcd.print("Stop");
-            }
+            lcd.setCursor(11, 0);
+            lcd.print(flag.start ? "Start" : "Stop");
             break;
         }
 
@@ -118,34 +124,35 @@ void vTaskLCD(void *pvParameters)
 
 void vTaskMotor(void *pvParameters)
 {
-    tb6600.init();
+    tb6600_m1.init();
     for (;;)
     {
-        tb6600.set(motorDirection == HIGH ? CLOCKWISE : COUNTERCLOCKWISE, motorSpeed, PULSE); // Setează direcția și viteza
+        // motor2Speed = map(motor2Speed, 0, 200, 0, 255);
 
+        tb6600_m1.set(motorDirection == HIGH ? CLOCKWISE : COUNTERCLOCKWISE, motor1Speed, THIRTYTWO_STEP);
         if (flag.start)
         {
-            tb6600.run(motorSpeed); // Rotește motorul la viteza setată
+            tb6600_m1.run(); // Rotește motorul la viteza setată 
+            motor.setSpeed(motor2Speed);
+            motor.run(motorDirection == HIGH ? FORWARD : BACKWARD);
+
         }
         else
         {
-            tb6600.active(false); // Oprește motorul
+            tb6600_m1.active(false); // Oprește motorul
+            motor.run(RELEASE);
         }
+        wdt_reset(); // Resetare watchdog
+
         vTaskDelay(20 / portTICK_PERIOD_MS); // Delay pentru reacții rapide
     }
 }
 
 void vTaskEncoder(void *pvParameters)
 {
-    // static uint32_t lastCheckTime = 0;
-
     for (;;)
     {
         enc.tick();
-
-        // if (millis() - lastCheckTime >= ENCODER_DELAY)
-        // {
-        //     lastCheckTime = millis();
 
         if (enc.isSingle())
         {
@@ -157,10 +164,14 @@ void vTaskEncoder(void *pvParameters)
                 Serial.println("Select Direction");
                 break;
             case SELECT_DIRECTION:
-                currentState = SELECT_SPEED;
-                Serial.println("Select Speed");
+                currentState = SELECT_MOTOR1_SPEED;
+                Serial.println("Select motor 1 speed");
                 break;
-            case SELECT_SPEED:
+            case SELECT_MOTOR1_SPEED:
+                currentState = SELECT_MOTOR2_SPEED;
+                Serial.println("Select motor 2 speed");
+                break;
+            case SELECT_MOTOR2_SPEED:
                 currentState = MAIN_MENU;
                 Serial.println("Back to Main Menu");
                 break;
@@ -180,68 +191,74 @@ void vTaskEncoder(void *pvParameters)
             {
                 flag.start = false;
                 Serial.println("Stop");
+                digitalWrite(EN_HIGH_VOLTAGE, LOW);
+
             }
             else
             {
                 flag.start = true;
                 Serial.println("Start");
+                digitalWrite(EN_HIGH_VOLTAGE, HIGH);
+
             }
         }
         else if (currentState == SELECT_DIRECTION)
         {
             if (enc.isRight())
             {
-                motorDirection = HIGH; // Forward
+                motorDirection = LOW; // Forward
                 Serial.println("Direction: Forward");
             }
             else if (enc.isLeft())
             {
-                motorDirection = LOW; // Backward
+                motorDirection = HIGH; // Backward
                 Serial.println("Direction: Backward");
             }
         }
-        else if (currentState == SELECT_SPEED)
+        else if (currentState == SELECT_MOTOR1_SPEED)
         {
-            if (enc.isRight())
+            if (enc.isLeft())
             {
-                motorSpeed++;
-                if (motorSpeed > 100)
-                    motorSpeed = 100;
-                Serial.println("Speed: " + String(motorSpeed));
+                motor1Speed++;
+                if (motor1Speed > 100)
+                    motor1Speed = 100; // Limitează viteza maximă
+                Serial.println("Speed: " + String(motor1Speed));
             }
-            else if (enc.isLeft())
+            else if (enc.isRight())
             {
-                motorSpeed--;
-                if (motorSpeed < 1)
-                    motorSpeed = 1;
-                Serial.println("Speed: " + String(motorSpeed));
+                motor1Speed--;
+                if (motor1Speed < 1)
+                    motor1Speed = 1; // Limitează viteza minimă
+                Serial.println("Speed: " + String(motor1Speed));
             }
         }
-        // }
+        else if (currentState == SELECT_MOTOR2_SPEED)
+        {
+            if (enc.isLeft())
+            {
+                motor2Speed++;
+                if (motor2Speed > 200)
+                    motor2Speed = 200; // Limitează viteza maximă
+                Serial.println("Speed: " + String(motor2Speed));
+            }
+            else if (enc.isRight())
+            {
+                motor2Speed--;
+                if (motor2Speed < 1)
+                    motor2Speed = 1; // Limitează viteza minimă
+                Serial.println("Speed: " + String(motor2Speed));
+            }
+        }
+
+        wdt_reset(); // Resetare watchdog
 
         vTaskDelay(30 / portTICK_PERIOD_MS); // Întârziere pentru reacții rapide
     }
 }
 
-void vTaskTransformer(void *pvParameters)
-{
-
-    // Setează modul Fast PWM pentru Timer0
-    TCCR0A = (1 << WGM00) | (1 << WGM01); // Mod PWM rapid
-    TCCR0B = (1 << CS01) | (1 << CS00);   // Prescaler de 64
-
-    pinMode(PWM_PIN, OUTPUT);
-
-    for (;;)
-    {
-        analogWrite(PWM_PIN, pwmValue);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
-}
-
 void vTaskCommunication(void *pvParameters)
 {
-    Serial.println("System Initialized\r\n");
+    Serial.println("System Initialized\r\n s - start, d - direction, m - motor 1 speed, M - motor 2 speed\r\n");
 
     for (;;)
     {
@@ -254,27 +271,27 @@ void vTaskCommunication(void *pvParameters)
             {
             case 's':
                 flag.start = val;
-                digitalWrite(ENA_PIN, flag.start ? LOW : HIGH); // Activează/dezactivează driverul
+                digitalWrite(ENA_PIN1, flag.start ? LOW : HIGH); // Activează/dezactivează driverul
+                digitalWrite(ENA_PIN2, flag.start ? LOW : HIGH);
+                digitalWrite(EN_HIGH_VOLTAGE, flag.start ? HIGH : LOW);
                 break;
             case 'd':
                 motorDirection = val ? HIGH : LOW;
                 break;
             case 'm':
-                motorSpeed = val;
+                motor1Speed = val;
                 break;
-            case 'p':
-                pwmValue = val;
-                if (pwmValue > 255)
-                    pwmValue = 255;
-                else if (pwmValue < 0)
-                    pwmValue = 0;
-                Serial.println("command: PWM, value: " + String(pwmValue));
+            case 'M':
+                motor2Speed = val;
                 break;
             default:
                 Serial.println("Wrong command! key: " + String(key) + ", val: " + String(val));
                 break;
             }
         }
+
+        wdt_reset();
+
         vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 }
@@ -304,6 +321,8 @@ void vTaskSensor(void *pvParameters)
         // Serial.print(" hPa, Humidity: ");
         // Serial.print((int)(humidity * 10) / 10.0); // Rotunjire la o zecimală
         // Serial.println(" %");
+
+        wdt_reset();
 
         vTaskDelay(2000 / portTICK_PERIOD_MS); // Actualizează datele la fiecare 2 secunde
     }
