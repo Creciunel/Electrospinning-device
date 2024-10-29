@@ -7,14 +7,14 @@ void vTaskCommunication(void *pvParameters);
 void vTaskSensor(void *pvParameters);
 
 // Motor constants
-uint8_t motor1Speed = 1;
-uint8_t motor2Speed = 25;    // Viteza motorului
+float motor1Speed = 0.1;      // Schimbat la float pentru a permite valori fracționare
+uint8_t motor2Speed = 25;     // Viteza motorului
 uint8_t motorDirection = LOW; // Direcția motorului
 
 // Transformer variables
 uint8_t pwmValue = 0;
 
-float voltage = 0.0;  
+float voltage = 0.0;
 float temperature = 0.0;
 float humidity = 0.0;
 float pressure = 0.0;
@@ -26,7 +26,6 @@ LiquidCrystal_I2C lcd(ADDRESS, 16, 2);
 MWCSTEPPER tb6600_m1(ENA_PIN1, DIR_PIN1, PUL_PIN1); // Inițializează driverul motorului
 
 AF_DCMotor motor(1);
-
 
 struct Flag
 {
@@ -94,7 +93,7 @@ void vTaskLCD(void *pvParameters)
             lcd.setCursor(0, 0);
             lcd.print("Motor 1 speed:");
             lcd.setCursor(0, 1);
-            lcd.print(int(motor1Speed)); // Afișează viteza curentă
+            lcd.print(String(motor1Speed, 2)); // Afișează cu două zecimale
             break;
 
         case SELECT_MOTOR2_SPEED:
@@ -132,10 +131,9 @@ void vTaskMotor(void *pvParameters)
         tb6600_m1.set(motorDirection == HIGH ? CLOCKWISE : COUNTERCLOCKWISE, motor1Speed, THIRTYTWO_STEP);
         if (flag.start)
         {
-            tb6600_m1.run(); // Rotește motorul la viteza setată 
+            tb6600_m1.run(); // Rotește motorul la viteza setată
             motor.setSpeed(motor2Speed);
             motor.run(motorDirection == HIGH ? FORWARD : BACKWARD);
-
         }
         else
         {
@@ -192,14 +190,12 @@ void vTaskEncoder(void *pvParameters)
                 flag.start = false;
                 Serial.println("Stop");
                 digitalWrite(EN_HIGH_VOLTAGE, LOW);
-
             }
             else
             {
                 flag.start = true;
                 Serial.println("Start");
                 digitalWrite(EN_HIGH_VOLTAGE, HIGH);
-
             }
         }
         else if (currentState == SELECT_DIRECTION)
@@ -219,17 +215,36 @@ void vTaskEncoder(void *pvParameters)
         {
             if (enc.isLeft())
             {
-                motor1Speed++;
-                if (motor1Speed > 100)
-                    motor1Speed = 100; // Limitează viteza maximă
-                Serial.println("Speed: " + String(motor1Speed));
+                // Crește viteza
+                if (motor1Speed >= 1)
+                {
+                    motor1Speed++; // Crește cu 1 dacă este >= 1
+                    if (motor1Speed > 100)
+                        motor1Speed = 100; // Limitează viteza maximă
+                }
+                else if (motor1Speed >= 0.1 && motor1Speed < 1)
+                {
+                    motor1Speed += 0.1; // Crește cu 0.1 dacă este între 0.1 și 1
+                }
+
+                Serial.println("Speed: " + String(motor1Speed, 2)); // Afișează cu două zecimale
             }
             else if (enc.isRight())
             {
-                motor1Speed--;
-                if (motor1Speed < 1)
-                    motor1Speed = 1; // Limitează viteza minimă
-                Serial.println("Speed: " + String(motor1Speed));
+                // Scade viteza
+                if (motor1Speed >= 1)
+                {
+                    motor1Speed--;                                      // Scade cu 1 dacă este >= 1
+                    Serial.println("Speed: " + String(motor1Speed, 2)); // Afișează cu două zecimale
+                }
+                else if (motor1Speed < 1 && motor1Speed >= 0.1)
+                {
+                    motor1Speed -= 0.1; // Scade cu 0.1 dacă este între 0.1 și 1
+                    if (motor1Speed < 0.1)
+                        motor1Speed = 0.1; // Limitează viteza minimă la 0.1
+
+                    Serial.println("Speed: " + String(motor1Speed, 2)); // Afișează cu două zecimale
+                }
             }
         }
         else if (currentState == SELECT_MOTOR2_SPEED)

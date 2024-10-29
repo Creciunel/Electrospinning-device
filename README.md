@@ -3,27 +3,26 @@
 <ul>
   <li><a href="#features">Features</a></li>
   <li><a href="#hardware-setup">Hardware Setup</a></li>
-  <li><a href="#software-ui">Software UI</a></li>
   <li><a href="#software-board-code">Software Board Code</a></li>
   <li><a href="#usage">Usage</a></li>
   <li><a href="#contributing">Contributing</a></li>
   <li><a href="#license">License</a></li>
 </ul>
 
-<h1>Electrospinning Device based on Arduino Mega</h1>
+<h1>Electrospinning Device based on ATMEGA2560</h1>
 
-<p>This repository contains the source code, hardware schematics, and documentation for a device designed to facilitate the electrospinning process using the Arduino Mega microcontroller. The device allows control and monitoring of various parameters involved in electrospinning, enabling researchers and enthusiasts to experiment with this technique.</p>
+<p>This repository contains the source code, hardware schematics, and documentation for a device designed to facilitate the electrospinning process using the ATMEGA2560 microcontroller (Arduino Mega).</p>
 
 <h2 id="features">Features</h2>
 
 <p>The device provides the following features:</p>
 <ul>
-  <li>Control and monitoring of various parameters involved in the electrospinning process.</li>
-  <li>Integration with Arduino Mega microcontroller for easy customization and expansion.</li>
-  <li>High voltage source consisting of ZVS driver, flyback transformer, capacitors, and voltage divider for measuring the output voltage.</li>
-  <li>ILI9341 screen with touch for user interface.</li>
-  <li>2 motors for controlling the electrospinning process.</li>
-  <li>L293D driver for regulating the amount that passes through the syringe.</li>
+  <li>Control and monitoring with BME280 sensor of temperature, pressure, humidity. And adjustable flow rate.</li>
+  <li>FreeRTOS based task scheduler for easier and more efficient task management.</li>
+  <li>High voltage source for electrospinning process.</li>
+  <li>LCD display for monitoring.</li>
+  <li>Motor for controlling the flow of the syringe. using driver TB6600.</li>
+  <li>Encoder for user interaction.</li>
 </ul>
 
 <h2 id="hardware-setup">Hardware Setup</h2>
@@ -36,18 +35,24 @@
   <tr>
     <td>
       <ul>
-        <li><b>The high voltage power supply</b> generates the high voltage needed for the electrospinning process. Its role is to provide a stable and adjustable voltage source to create the electrostatic field required to draw the polymer solution into nanofibers.</li>
-        <li><b>The ZVS (Zero Voltage Switching) driver</b> minimizes switching losses in power semiconductor devices by ensuring that switching occurs when the voltage across the switches is close to zero. It works by carefully timing the switching events to coincide with the natural resonant frequency of the circuit, reducing power dissipation and improving efficiency.</li>
-        <li><b>The Flyback transformer</b> is used to step up the voltage from the high voltage power supply to the level required for electrospinning. It operates by storing energy in its primary winding during the on-time of the switching cycle and then releasing this energy to the secondary winding during the off-time. This stepped-up voltage is then applied to the electrospinning setup.</li>
-        <li><b>The voltage divider</b> is used to measure the output voltage with an Arduino by dividing the high voltage output to a range that is safe for the Arduino's analog input. It consists of two resistors connected in series, with the output voltage taken from the connection between them. This allows the Arduino to accurately measure the high voltage output without damaging itself.</li>
-        <li><b>The voltage</b> is applied to the tip of the syringe needle, which contains the polymer solution. This is typically done using a conductive needle connected to the high voltage power supply. When the high voltage is applied, it creates an electrostatic field around the needle, causing the polymer solution to be drawn out in the form of nanofibers.</li>
+        <li><b>The high voltage power supply</b> generates the high voltage needed for the electrospinning process. It provides a stable and adjustable voltage source to create the electrostatic field required to draw the polymer solution into nanofibers.</li>
+        <li><b>Varistor and Transformer</b> convert the high voltage to the voltage required for electrospinning.</li>
+        <li><b>Multiplier/Rectifier</b> converts the voltage to the voltage required for the motor.</li>
       </ul>
     </td>
   </tr>
   <tr>
     <td>
-      <h3>Block diagram of the circuit</h3>
-        <img src="Images/Block-diagram1.jpg" alt="Main control" style="max-width: 100%;">
+      <h3>Comand Board</h3>
+        <ul>
+        <li><b>MCU</b> ATMEGA2560 (Mega 2560)</li>
+        <li><b>Encoder</b> For seting the flow rate, starting and stopping the motor, and opening screen with sensor values.</li>
+        <li><b>LCD Display</b> Show sensor values.</li>
+        <li><b>TB6600</b> Stepper motor driver.</li>
+        <li><b>Motor</b> Stepper motor for controlling the flow of the syringe.</li>
+        <li><b>BME280</b> Sensor for monitoring temperature, pressure, and humidity.</li>
+        <li><b>Power Supply</b> MCU power supply.</li>
+      </ul>
     </td>
   </tr>
 </table>
@@ -55,10 +60,6 @@
   <li>See more about <a href="/Hardware/README.md">hardware Setup</a></li>
 </ul>
 
-<h2 id="software-ui">Software UI</h2>
-<ul>
-  <li>See more about <a href="/Software/UI/README.md">software UI.</a></li>
-</ul>
 
 <h2 id="software-board-code">Software Board Code</h2>
 <ul>
@@ -69,9 +70,9 @@
 
 <p>To use the electrospinning device:</p>
 <ol>
-  <li>Connect the high voltage source components according to the provided schematics.</li>
+  <li>Connect the high voltage source to 220V.</li>
   <li>Connect the Arduino Mega to the components and upload the provided source code.</li>
-  <li>Use the ILI9341 screen with touch to control and monitor the electrospinning process.</li>
+  <li>Use the LCD screen with encoder to control and monitor the electrospinning process.</li>
   <li>Adjust the settings as needed and start the electrospinning process.</li>
   <li>Monitor the output and make adjustments as necessary.</li>
 </ol>
