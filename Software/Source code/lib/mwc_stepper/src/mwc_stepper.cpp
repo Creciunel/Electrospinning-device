@@ -9,32 +9,37 @@ MWCSTEPPER::MWCSTEPPER(uint8_t _enPin, uint8_t _dirPin, uint8_t _stepPin)
     enPin = _enPin;
 }
 
-void MWCSTEPPER::init() {
+bool MWCSTEPPER::init() {
     pinMode(stepPin, OUTPUT);
     pinMode(dirPin, OUTPUT);
     pinMode(enPin, OUTPUT);
     digitalWrite(enPin, LOW);
+    return true;
 }
 
-void MWCSTEPPER::set(bool _dir, float _rpm, uint16_t _pulse) {
+uint64_t MWCSTEPPER::set(bool _dir, float _rpm, uint16_t _pulse) {
     digitalWrite(dirPin, _dir);
-    rpm_t = 60000000 / (2 * _pulse * _rpm); // Calcularea timpului per pas
+    rpm_t = uint64_t(60000000 / (2 * _pulse * _rpm)); 
+    return rpm_t;
 }
 
-void MWCSTEPPER::run(uint64_t _rpmt) {
+bool MWCSTEPPER::run(uint64_t _rpmt) {
     digitalWrite(stepPin, HIGH);
-    vTaskDelay(pdMS_TO_TICKS(_rpmt / 1000)); // Așteaptă timp în milisecunde
+    vTaskDelay(pdMS_TO_TICKS(_rpmt / 1000)); 
     digitalWrite(stepPin, LOW);
-    vTaskDelay(pdMS_TO_TICKS(_rpmt / 1000)); // Așteaptă timp în milisecunde
+    vTaskDelay(pdMS_TO_TICKS(_rpmt / 1000)); 
+    return true;
 }
 
-void MWCSTEPPER::run() {
+bool MWCSTEPPER::run() {
     digitalWrite(stepPin, HIGH);
-    vTaskDelay(pdMS_TO_TICKS(rpm_t / 1000)); // Așteaptă timp în milisecunde
+    vTaskDelay(pdMS_TO_TICKS(rpm_t / 1000)); // miliseconds
     digitalWrite(stepPin, LOW);
-    vTaskDelay(pdMS_TO_TICKS(rpm_t / 1000)); // Așteaptă timp în milisecunde
+    vTaskDelay(pdMS_TO_TICKS(rpm_t / 1000)); 
+    return true;
 }
 
-void MWCSTEPPER::active(bool _active) {
+bool MWCSTEPPER::active(bool _active) {
     digitalWrite(enPin, _active);
+    return true;
 }

@@ -18,11 +18,11 @@ private:
     uint64_t rpm_t=500;
 public:
 	MWCSTEPPER(uint8_t _enPin, uint8_t _dirPin, uint8_t _stepPin);
-	void init();
-	void active(bool _active);
-	void run(uint64_t _rpmt);
-	void run();
-	void set(bool _dir, float _rpm, uint16_t _pulse);
+	bool init();
+	bool active(bool _active);
+	bool run(uint64_t _rpmt);
+	bool run();
+	uint64_t set(bool _dir, float _rpm, uint16_t _pulse);
 };
 
 

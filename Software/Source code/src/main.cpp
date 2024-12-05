@@ -105,7 +105,7 @@ void vTaskLCD(void *pvParameters)
 
         case SENSOR_VALUES:
             lcd.setCursor(0, 0);
-            lcd.print("Voltage:" + String(int(voltageValue(analogRead(ADC_PIN)) / 1000.0)));
+            lcd.print("V_out:" + String(int(voltageValue(analogRead(ADC_PIN)) / 1000.0))+"kV");
             lcd.setCursor(0, 1);
             lcd.print("T:" + String((int)(temperature)));
             lcd.setCursor(5, 1);
@@ -146,8 +146,7 @@ void vTaskMotor(void *pvParameters)
     }
 }
 
-void vTaskEncoder(void *pvParameters)
-{
+void vTaskEncoder(void *pvParameters){
     for (;;)
     {
         enc.tick();
