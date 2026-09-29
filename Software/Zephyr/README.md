@@ -23,6 +23,23 @@ Flash firmware to target device:
 west flash
 ```
 
+QEMU simulation
+
+```bash
+qemu-system-xtensa -machine esp32s3 -nographic -kernel build/zephyr/zephyr.elf
+```
+
+Or Nativ Sim
+
+```bash
+west build -p -b native_sim/native/64 .
+
+./build/zephyr/zephyr.exe
+
+minicom -D /dev/pts/1 -b 115200
+
+```
+
 ## System Architecture
 
 The software utilizes Zephyr's SMP (Symmetric Multiprocessing) capabilities across both ESP32-S3 Xtensa cores (PRO_CPU / Core 0 and APP_CPU / Core 1). Threads are strictly pinned to specific cores to guarantee deterministic real-time control for motors and safety while handling non-deterministic networking tasks separately.

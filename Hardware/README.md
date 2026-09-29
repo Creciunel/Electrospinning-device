@@ -1,8 +1,10 @@
-# Electrospinning Device Based on ESP32-S3
+# Electrospinning Device Hardware Documentation
 
-## Hardware Architecture & Component Analysis
+Hardware specification, schematic architecture, component choices, and pin assignments for the ESP32-S3 Electrospinning Control Board.
 
-Key Components Diagram
+---
+
+## 📐 Hardware Architecture Diagram
 
 ```mermaid
 ---
@@ -18,114 +20,66 @@ config:
 ---
 classDiagram
     direction TB
-    atx24 --> esp32s3 : Power supply (5V/3.3V)
-    esp32s3 --> atx24 : PS_ON Control signal
+    atx24 --> esp32s3 : Power Supply (5V / 3.3V)
+    esp32s3 --> atx24 : PS_ON Control Signal
     
-    %% Motion
-    esp32s3 --> TMC2209 : Siringe pump (UART/Step/Dir)
-    esp32s3 --> DRV8833 : DC Collector (PWM Bidirectional)
+    %% Motion Control (Dual TMC2209)
+    esp32s3 --> TMC2209_1 : Syringe Pump (UART / STEP / DIR)
+    esp32s3 --> TMC2209_2 : Rotary Collector (STEP / DIR)
     
     %% UI & Sensors
-    esp32s3 --> SSD1306 : UI Display (I2C)
-    Encoder --> esp32s3 : UI Input
-    GXHT30 --> esp32s3 : Environment Sensor (I2C)
-    Termoresistor --> esp32s3 : Safety sensor (ADC)
+    esp32s3 --> SSD1306 : UI Display (I2C Bus)
+    Encoder --> esp32s3 : UI Navigation
+    GXHT30 --> esp32s3 : Temp / Humidity Sensor (I2C)
+    Thermistor --> esp32s3 : Safety Thermal Sensor (ADC)
     
     %% AC Control
-    esp32s3 --> Triac1 : 220V Temp control (Opto-isolated)
-    esp32s3 --> Triac2 : 220V Humid control (Opto-isolated)
+    esp32s3 --> Triac1 : 220V Heating Control (Opto-isolated)
+    esp32s3 --> Triac2 : 220V Dehumidifier Control (Opto-isolated)
     
     %% High Voltage
-    Voltage2 --> Collector : HV Supply (Isolated)
+    HV_Supply --> Collector : High Voltage Output (Isolated)
 
     atx24 : ATX 350W PSU
-    esp32s3 : WeAct ESP32-S3-N16R8
-    TMC2209 : Silent Stepper Driver (UART)
-    DRV8833 : Dual H-Bridge (High Efficiency)
-    GXHT30 : Temp/Hum Sensor
-    SSD1306 : 128x64 OLED
-
+    esp32s3 : WeAct ESP32-S3 (N16R8)
+    TMC2209_1 : Syringe Stepper Driver (UART)
+    TMC2209_2 : Collector Stepper Driver
+    GXHT30 : Temp / Hum Sensor
+    SSD1306 : 128x64 OLED Display
+    Triac1 : BTA24 + MOC3041
+    Triac2 : BTA24 + MOC3041
 ```
-## Components Details
 
-- Power supply 350W : ATX24 
-- Stepper motor driver performance up to 35V and ± 1A, motors in fuji, half, 1/4, 1/8, and 1/16 step modes : A4988 
-- Temperature and humidity sensor : GXHT30
-- Push button encoder : Encoder
-- LCD display : SSD1306
-- Thermistor : Termoresistor
-- Temperature control BTA24 220V : Triac1
-- Humidity control BTA24 220V : Triac2
-- DC 2-10V 1.5A motor driver : L298N
-- 12V : Voltage
-- High voltage power supply : Voltage2
+## Core Components & Drop-in Alternatives
 
---- 
-# Components Details & PIN Compatibility (Fallbacks)
-## MCU
-### WeAct Studio ESP32-S3
+| Subsystem | Active Component | Function / Spec | Hardware Fallbacks |
+| --- | --- | --- | --- |
+| **MCU** | **WeAct ESP32-S3** | ESP32-S3-N16R8 (16MB Flash, 8MB PSRAM) | ESP32-S3-DevKitC-1, Waveshare ESP32-S3-N8R2 |
+| **Power Supply** | **ATX24 350W PSU** | 12V, 5V, 3.3V rails with PS_ON control | Standard ATX PSU / External 12V Buck Converters |
+| **Syringe Driver** | **TMC2209 (#1)** | Syringe pump stepper driver (UART + STEP/DIR) | TMC2208 (lacks StallGuard), TMC2225 |
+| **Collector Driver** | **TMC2209 (#2)** | Rotary collector stepper driver (STEP/DIR) | TMC2208, TMC2225, A4988 |
+| **Environment** | **GXHT30** | I2C Temperature & Humidity Sensor | SHT30, SHT31, SHT40 |
+| **Display** | **SSD1306** | 0.96" 128x64 OLED (I2C) | SH1106 (1.3"), SSD1309 (2.4") |
+| **AC Control** | **BTA24 + MOC3041** | 25A Triac with Zero-Cross Optocoupler (220V AC) | MOC3063 (Opto), BTA41 (40A Triac) |
+| **Safety Sensor** | **NTC Thermistor** | ADC thermal monitoring | Standard 10k NTC Thermistor |
 
-* ESP32-S3-N16R8 (WeAct Studio)
-	+ Main: WeAct Studio ESP32-S3 (16MB Flash / 8MB PSRAM)
-	+ Fallback 1: ESP32-S3-DevKitC-1 (Full size, compatible pinout for most GPIOs)
-	+ Fallback 2: Waveshare ESP32-S3-N8R2 (Same core, check mounting holes)
+## ESP32-S3 Pin Mapping Analysis
 
-## Stepper Driver
-### TMC2209 (Syringe Pump)
+| Peripheral | Signal Function | GPIO | Logic Type |
+| --- | --- | --- | --- |
+| **I2C Bus** | SDA / SCL | GPIO 17 / GPIO 18 | Shared Bus (GXHT30 + SSD1306) |
+| **TMC2209 #1** | UART TX / RX | GPIO 15 / GPIO 16 | Syringe Driver Serial Config |
+| **TMC2209 #1** | STEP / DIR | GPIO 41 / GPIO 42 | Syringe High-Speed Motion Pulses |
+| **TMC2209 #2** | STEP / DIR | GPIO 4 / GPIO 5 | Collector Motor Speed & Direction |
+| **ATX Power** | PS_ON | GPIO 7 | PSU Power-On Switch Signal |
+| **Rotary Encoder** | Phase A / Phase B / SW | GPIO 1 / GPIO 2 / GPIO 3 | UI Navigation & Push Selection |
+| **AC Control 1** | Triac Trigger 1 (Heat) | GPIO 39 | Opto-isolated Gate Trigger |
+| **AC Control 2** | Triac Trigger 2 (Hum) | GPIO 40 | Opto-isolated Gate Trigger |
+| **Thermistor** | NTC ADC | GPIO 10 | Analog Temperature Measurement |
 
-* TMC2209 (Ultra-silent, UART control for current/StallGuard)
-	+ Fallback (Pin/Logic Compatible): TMC2208: Same pins, but lacks StallGuard (sensorless homing)
-	+ Fallback (Pin/Logic Compatible): TMC2225: Similar performance, different package but often available on same-pinout modules
-	+ Note: UART communication is essential for real-time current adjustment to prevent motor overheating
+## Hardware Design Files & Links
 
-  ![Connecting schema](https://meltbro.de/images/product_images/original_images/H1864dda99b3341a1ac1405a34ff42aber.jpg)
-
-## DC Motor Driver
-### DRV8833 (Collector)
-
-* DRV8833 (Dual H-Bridge, MOSFET based)
-	+ Why: Replaces L298N because it doesn't need a heatsink and supports low voltage (2V-10V) with high efficiency
-	+ Fallback (Logic Compatible): TB6612FNG: Identical logic (IN1, IN2, PWM), very efficient
-	+ Fallback (Logic Compatible): MAX1508: For very small DC motors, low heat
-
-[Documentation](https://lastminuteengineers.com/drv8833-arduino-tutorial/)
-
-## Environmental Sensor
-### GXHT30
-
-* GXHT30 (I2C)
-	+ Fallback (I2C / Software Compatible): SHT30 / SHT31: The industry standard, identical I2C registers
-	+ Fallback (I2C / Software Compatible): SHT40: Newer generation, lower power, same I2C bus
-
-## Display
-### SSD1306 OLED
-
-* SSD1306 (128x64, I2C)
-	+ Fallback (I2C Compatible): SH1106: 1.3" OLED, requires a minor offset change in Zephyr dts
-	+ Fallback (I2C Compatible): SSD1309: 2.4" Large OLED for better visibility in the lab
-
-
-
-![Encoder](https://ae04.alicdn.com/kf/S76cb95c3189e4bb29b8eee5beeb6f112Z.jpg_640x640.jpg) [Product link](https://aliexpress.ru/item/1005004958941138.html?spm=a2g2w.orderdetail.0.0.6f374aa6PABbVD&sku_id=12000031156235749)
-
-## AC Control
-### BTA24 + MOC3041
-
-* BTA24 (25A Triac) + MOC3041 (Zero-cross Opto)
-	+ Fallback (Safety Compatible): MOC3063: Higher isolation voltage
-	+ Fallback (Safety Compatible): BTA41: If higher current (40A) is needed for heavy heating elements
-
-## PIN Mapping Analysis (ESP32-S3 WeAct)
-
-To ensure the TMC2209 UART and other peripherals don't conflict:
-
-| Peripheral | PIN Function | GPIO | Logic Type |
-| --- | --- | --- | --- |  
-| I2C Bus | SDA / SCL | 17/18 | Shared (Sensors + Display) |
-| TMC2209 | UART TX / RX | 15 / 16 | Serial Config | 
-| TMC2209 | STEP / DIR | 41 / 42 | High-speed Pulse | 
-| DRV8833 | PWM(IN1) / IN2 | 4, 5 | Motor Speed/Dir | 
-| ATX24 | PS_ON | 7 | Power Control | 
-| Encoder | A / B / SW | 1, 2, 3 | UI Navigation | 
-| Triacs | Trigger 1 / 2 | 39 / 40 | AC Switching | 
-| Thermistor | ADC Input | 10 | Analog Temp | 
+* **Syringe Mechanism CAD Files**: [`Hardware/syringe/`](Hardware/syringe/)
+* **EasyEDA Pro Project Backup**: [`Hardware/easyEDA_project/BackupProjects_creciunelcatalin_personal_0_20260923.eprj2`](Hardware/easyEDA_project/BackupProjects_creciunelcatalin_personal_0_20260923.eprj2)
+* **3D Assembly Model (STEP)**: [`Hardware/3D_1-PCB_PCB_ESP-Electrospinning_2026-09-23.step`](Hardware/3D_1-PCB_PCB_ESP-Electrospinning_2026-09-23.step)
+* **Bill of Materials (BOM)**: [`Pricing/BOM_ESP-Electrospinning_ESP-Electrospinning_2026-09-24.xlsx`](Pricing/BOM_ESP-Electrospinning_ESP-Electrospinning_2026-09-24.xlsx)

@@ -56,5 +56,5 @@
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
-  "cmake.sourceDirectory": "/home/crc/Documents/Electrospinning-device/Software/Electrospining/.pio/libdeps/esp32-s3-devkitc-1/Adafruit BusIO"
+  "cmake.sourceDirectory": "/home/crc/Documents/Electrospinning-device/Software/Zephyr"
 }
