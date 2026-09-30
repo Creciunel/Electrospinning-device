@@ -13,6 +13,10 @@ jobs:
       image: ghcr.io/zephyrproject-rtos/zephyr-build:v0.27.4
       options: --user root
 
+    defaults:
+      run:
+        working-directory: workspace/Software
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -21,23 +25,23 @@ jobs:
 
       - name: Initialize West and Sync Dependencies
         run: |
-          west init -l workspace/Software/Zephyr
+          west init -l Zephyr
           west update
           west zephyr-export
 
       - name: Run Native Simulation Test
         run: |
-          west build -p -b native_sim workspace/Software/Zephyr
-          ./workspace/Software/Zephyr/build/zephyr/zephyr.exe --test-duration=2
+          west build -p -b native_sim Zephyr
+          ./build/zephyr/zephyr.exe --test-duration=2
 
       - name: Build ESP32-S3 Firmware
         run: |
-          west build -p -b weact_esp32s3_b/esp32s3/procpu workspace/Software/Zephyr
+          west build -p -b weact_esp32s3_b/esp32s3/procpu Zephyr
 
       - name: Upload ESP32-S3 Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: zephyr-esp32s3-firmware
           path: |
-            workspace/Software/Zephyr/build/zephyr/zephyr.bin
-            workspace/Software/Zephyr/build/zephyr/zephyr.elf
+            workspace/Software/build/zephyr/zephyr.bin
+            workspace/Software/build/zephyr/zephyr.elf
