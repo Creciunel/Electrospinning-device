@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/zephyrproject-rtos/zephyr-build:v0.27.4
+      options: --user root
 
     steps:
       - name: Checkout repository
@@ -24,11 +25,16 @@ jobs:
           west update
           west zephyr-export
 
-      - name: Build Application
+      - name: Run Native Simulation Test
+        run: |
+          west build -p -b native_sim workspace/Software/Zephyr
+          ./workspace/Software/Zephyr/build/zephyr/zephyr.exe --test-duration=2
+
+      - name: Build ESP32-S3 Firmware
         run: |
           west build -p -b weact_esp32s3_b/esp32s3/procpu workspace/Software/Zephyr
 
-      - name: Upload Build Artifacts
+      - name: Upload ESP32-S3 Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: zephyr-esp32s3-firmware
