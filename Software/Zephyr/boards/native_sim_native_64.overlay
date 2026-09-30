@@ -1,0 +1,12 @@
+/ {
+	chosen {
+		zephyr,display = &sdl_display;
+	};
+
+	sdl_display: sdl_display {
+		compatible = "zephyr,sdl-dc";
+		height = <64>;
+		width = <128>;
+		pixel-format = <4>; /* 4 = PIXEL_FORMAT_MONO10 */
+	};
+};

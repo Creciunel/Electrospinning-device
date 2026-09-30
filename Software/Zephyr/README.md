@@ -14,7 +14,7 @@ source ~/zephyrproject/zephyr/zephyr-env.sh
 Build firmware for WeAct ESP32-S3 board:
 
 ```bash
-west build -b weact_esp32s3_b/esp32s3/procpu
+west build -p -b weact_esp32s3_b/esp32s3/procpu .
 ```
 
 Flash firmware to target device:
